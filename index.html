@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AgriMind AI 🌱 Smart Farming</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Noto+Sans+Devanagari:wght@500;700&family=Noto+Sans+Gujarati:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--g:#238a4d;--gd:#0f3d26;--gl:#e3f5e9;--bg:#eef7f1;--c:#fff;--m:#5d7066;--l:#d4e6da;--r:#c94b4b;--a:#c98410;--sun:#f6b92b;--t:#17301f;--soil:#5a3a22;--ease:cubic-bezier(.22,.8,.24,1)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e1b14;--c:#16281e;--l:#27402f;--t:#e6f3ea;--m:#93aa9b;--gl:#1d3a29;--gd:#bfe9cd}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--t);font:500 18px/1.45 "Baloo 2","Noto Sans Gujarati","Noto Sans Devanagari",system-ui,sans-serif;padding-top:env(safe-area-inset-top,0);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{min-height:54px;border:0;border-radius:16px;padding:0 20px;font-weight:700;cursor:pointer;background:var(--gl);color:var(--gd);transition:transform .2s var(--ease),background .3s,box-shadow .3s,color .3s}
+button:hover{transform:translateY(-2px);box-shadow:0 6px 16px #0f3d2622}button:active{transform:scale(.97)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.pri{background:var(--g);color:#fff}.dng{background:#fde8e8;color:var(--r)}
+a{color:inherit}[hidden]{display:none!important}
+/* language */
+#lg{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:var(--bg);padding:20px;overflow:auto;transition:opacity .6s var(--ease),visibility .6s}
+#lg.hide{opacity:0;visibility:hidden;pointer-events:none}
+.lbox{max-width:460px;width:100%;text-align:center;animation:up .7s var(--ease) both}
+.lbox .lgi{font-size:64px;animation:pop 2.4s ease-in-out infinite}.lbox h1{margin:0;font-size:44px;color:var(--gd)}
+.lbox p{margin:6px 0 16px}.lbox .lb{display:grid;gap:12px;margin:18px 0}.lbox .lb button{font-size:24px;min-height:64px;background:var(--c);border:2px solid var(--l)}.lbox .lb button:hover{background:var(--g);color:#fff}
+.lbox small{display:block;color:var(--m);font-size:13px;line-height:1.35;margin-top:6px}
+@keyframes pop{50%{transform:translateY(-8px) rotate(6deg)}}
+#lgb{position:fixed;top:calc(10px + env(safe-area-inset-top,0));right:10px;z-index:60;min-height:44px;padding:0 14px;border-radius:30px;background:var(--c);border:2px solid var(--l);box-shadow:0 4px 14px #0003}
+/* hero */
+#hero{height:600vh;position:relative;background:linear-gradient(#bfe6f7,#e9f8ee 70%)}
+.stick{position:sticky;top:0;height:100vh;overflow:hidden;display:grid;place-items:center}
+.hint{position:absolute;bottom:22%;left:0;right:0;text-align:center;font-size:22px;font-weight:800;color:#0f3d26;animation:b 1.6s ease-in-out infinite;transition:opacity .4s}
+@keyframes b{50%{transform:translateY(10px)}}
+.title{position:absolute;inset:0;display:grid;place-content:center;text-align:center;padding:24px;opacity:0;pointer-events:none;will-change:transform,opacity}
+.title h1{font-size:clamp(38px,8vw,84px);line-height:1.05;margin:0;color:#0f3d26;font-weight:800}
+.title p{font-size:clamp(18px,3vw,26px);margin:12px 0 24px;color:#25503a}
+.title button{pointer-events:auto;font-size:22px;min-height:64px}
+#sc{position:absolute;inset:0;width:100%;height:100%}#sc g{will-change:transform,opacity}
+.cap{position:absolute;top:9%;left:0;right:0;text-align:center;font-size:clamp(22px,4vw,40px);font-weight:800;color:#fff;text-shadow:0 2px 12px #000a}.title h1,.title p{text-shadow:0 2px 14px #fffc}
+/* app */
+#app{max-width:1100px;margin:0 auto;padding:0 16px 40px}
+.tabs{position:sticky;top:0;z-index:5;display:flex;gap:8px;overflow-x:auto;padding:10px 0;background:var(--bg);scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:1 0 86px;display:grid;place-items:center;padding:8px 6px;min-height:72px;line-height:1.1;font-size:14px;background:var(--c);border:2px solid var(--l)}
+.tabs button b{font-size:28px}.tabs .on{background:var(--g);color:#fff;border-color:var(--g)}
+.view{display:none}.view.on{display:block}
+.view.on>*{animation:up .55s var(--ease) both}.view.on>*:nth-child(2){animation-delay:.05s}.view.on>*:nth-child(3){animation-delay:.1s}.view.on>*:nth-child(4){animation-delay:.15s}.view.on>*:nth-child(5){animation-delay:.2s}.view.on>*:nth-child(n+6){animation-delay:.25s}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+h2{font-size:30px;margin:14px 0 6px;color:var(--gd)}.mu{color:var(--m);font-size:15px}
+.card{background:var(--c);border:2px solid var(--l);border-radius:20px;padding:18px;margin:12px 0;transition:box-shadow .3s,transform .3s var(--ease)}
+.card:hover{box-shadow:0 8px 22px #0f3d2614}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.met{text-align:center}.met b{display:block;font-size:34px}.met span{font-size:34px}.met small{display:block;color:var(--m);font-size:15px}
+.bar{height:12px;background:var(--l);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--g);transition:width .9s var(--ease)}
+.big{font-size:26px;font-weight:800}.row{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--l)}.row:last-child{border:0}.row .e{font-size:36px}.row div{flex:1}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.acts button{flex:1 1 150px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.fld label{display:block;font-weight:700;margin-bottom:4px}
+.fld input,.fld select,.fld textarea,.in{width:100%;min-height:54px;border:2px solid var(--l);border-radius:14px;padding:0 14px;background:var(--c);transition:border-color .25s,box-shadow .25s}
+.fld textarea{padding:12px 14px;min-height:120px;resize:vertical}.full{grid-column:1/-1}
+.emo{display:flex;gap:8px}.emo button{flex:1;font-size:15px;min-height:64px;background:var(--c);border:2px solid var(--l);padding:4px}
+.msg{padding:14px;border-radius:14px;margin:10px 0;background:var(--gl);animation:up .4s var(--ease) both}.msg.w{background:#fff3d6;color:#6a4708}.msg.e{background:#fde8e8;color:#8f2b2b}
+.crops{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start}
+.cc .hd{cursor:pointer;text-align:center}.cc .hd .e{font-size:56px;transition:transform .35s var(--ease)}.cc:hover .hd .e{transform:scale(1.12) rotate(-4deg)}.cc .hd small{display:block;color:var(--m);font-size:14px}
+.cc .det{display:none;margin-top:10px;border-top:1px solid var(--l);padding-top:10px}.cc.open .det{display:block;animation:up .4s var(--ease) both}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:16px}.kv span:nth-child(odd){color:var(--m)}
+.cc .acts button{min-height:46px;font-size:15px;flex:1 1 120px}
+table{width:100%;border-collapse:collapse;font-size:16px}th,td{text-align:left;padding:10px 6px;border-bottom:1px solid var(--l)}
+.photo{display:block;border:3px dashed var(--l);border-radius:18px;padding:30px;text-align:center;cursor:pointer;transition:background .3s,border-color .3s}.photo:hover{background:var(--gl);border-color:var(--g)}.photo input{display:none}
+canvas{max-width:100%;border-radius:12px;margin-top:10px}
+.chat{display:flex;flex-direction:column;gap:8px;max-height:48vh;overflow:auto;margin-bottom:10px;scroll-behavior:smooth}.b{padding:10px 14px;border-radius:16px;max-width:88%;white-space:pre-wrap;animation:up .35s var(--ease) both}.b.u{align-self:flex-end;background:var(--g);color:#fff}.b.a{background:var(--gl)}
+summary{font-weight:700;cursor:pointer}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.chips button{min-height:44px;font-size:15px;padding:0 14px}.chips button.on{background:var(--g);color:#fff}
+.acts .in{flex:2 1 200px}
+.stars{display:flex;gap:6px;margin:8px 0}.stars button{min-height:50px;font-size:28px;padding:0 10px;background:var(--c);border:2px solid var(--l)}.stars button.on{background:#fff3d6;border-color:var(--sun)}
+.pr{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.pr .card{text-align:center;margin:0}.pr .e{font-size:44px}.pr b{display:block;font-size:20px}.pr span{font-size:15px;color:var(--m)}
+.sch{display:flex;gap:12px;align-items:flex-start}.sch .e{font-size:40px}.sch div{flex:1}.sch a{display:inline-block;margin-top:6px;font-weight:700;color:var(--g)}
+.ck{display:flex;gap:10px;align-items:flex-start;font-size:15px;margin-top:10px}.ck input{width:24px;height:24px;margin-top:3px;flex:none}
+footer{text-align:center;color:var(--m);font-size:14px;padding:24px 0 10px}
+@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}.form,.crops,.pr{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style></head><body>
+
+<div id="lg"><div class="lbox"><div class="lgi">🌱</div><h1>AgriMind</h1>
+<p>Choose your language • भाषा चुनें • ભાષા પસંદ કરો</p>
+<div class="lb"><button data-l="0">English</button><button data-l="1">हिन्दी</button><button data-l="2">ગુજરાતી</button></div>
+<div id="lgn"></div></div></div>
+<button id="lgb" aria-label="Language">🌐 EN</button>
+
+<section id="hero"><div class="stick"><svg id="sc" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" aria-label="Earth zooming into a farm and a tree">
+<defs><radialGradient id="oc" cx=".35" cy=".3"><stop offset="0" stop-color="#58b6ff"/><stop offset="1" stop-color="#0a3585"/></radialGradient>
+<linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f9fe6"/><stop offset="1" stop-color="#dcf3ff"/></linearGradient>
+<linearGradient id="bk" x1="0" x2="1"><stop offset="0" stop-color="#3d2514"/><stop offset=".45" stop-color="#8d6038"/><stop offset="1" stop-color="#3a2312"/></linearGradient>
+<radialGradient id="cn" cx=".4" cy=".35"><stop offset="0" stop-color="#78d46f"/><stop offset="1" stop-color="#17622a"/></radialGradient>
+<clipPath id="gc"><circle cx="400" cy="250" r="120"/></clipPath></defs>
+<rect width="800" height="500" fill="#02040d"/><g id="st"></g>
+<g id="fg"><rect width="800" height="300" fill="url(#sk)"/><text x="90" y="90" font-size="50">☁️</text><text x="560" y="130" font-size="40">☁️</text>
+<path d="M0 300Q150 230 300 300Q450 240 600 300Q700 260 800 300V310H0Z" fill="#5d9c4a"/><rect y="300" width="800" height="200" fill="#6fb552"/><g id="rw" stroke="#3f8a35" stroke-width="3"></g>
+<text x="120" y="305" font-size="46">🏡</text><text x="610" y="400" font-size="42">🚜</text><text x="40" y="440" font-size="30">🌾🌾🌾</text></g>
+<g id="gl"><circle cx="400" cy="250" r="128" fill="none" stroke="#7cc8ff" stroke-width="6" opacity=".35"/><circle cx="400" cy="250" r="120" fill="url(#oc)"/>
+<g clip-path="url(#gc)" fill="#3a9d4f"><path d="M360 230q15-25 40-15q20 15 10 45q-10 30-30 40q-25-15-20-70z"/><path d="M410 170q40-20 70 10q10 30-15 50q-20 10-40-5q-25-10-15-55z"/><path d="M290 180q25-20 35 10q-5 30-20 45q-20 20-25-10q-5-25 10-45z"/><path d="M370 175q20-15 35-2q-10 15-30 15z"/></g>
+<circle cx="440" cy="235" r="3" fill="#ff4d4d"><animate attributeName="r" values="2;7;2" dur="1.2s" repeatCount="indefinite"/></circle></g>
+<g id="tg"></g><circle id="fl" cx="400" cy="290" r="0" fill="#fff"/></svg>
+<div class="cap" id="cap"></div><div class="hint" id="hint">🌍 <span data-i="scroll"></span> ⬇️</div>
+<div class="title" id="ttl"><h1>🌱 <span data-i="h1"></span></h1><p data-i="hsub"></p><button class="pri" id="startb">🚜 <span data-i="start"></span></button></div>
+</div></section>
+
+<div id="app">
+<div class="tabs" id="tabs">
+<button class="on" data-v="home"><b>🏠</b><span data-i="t_home"></span></button>
+<button data-v="entry"><b>📝</b><span data-i="t_entry"></span></button>
+<button data-v="advice"><b>🤖</b><span data-i="t_advice"></span></button>
+<button data-v="scan"><b>📷</b><span data-i="t_scan"></span></button>
+<button data-v="crops"><b>🌾</b><span data-i="t_crops"></span></button>
+<button data-v="bud"><b>💰</b><span data-i="t_bud"></span></button>
+<button data-v="chat"><b>💬</b><span data-i="t_chat"></span></button>
+<button data-v="schemes"><b>🏛️</b><span data-i="t_schemes"></span></button>
+<button data-v="tools"><b>🧰</b><span data-i="t_tools"></span></button>
+<button data-v="enq"><b>✉️</b><span data-i="t_enq"></span></button>
+<button data-v="hist"><b>📊</b><span data-i="t_hist"></span></button>
+<button data-v="about"><b>📞</b><span data-i="t_about"></span></button>
+</div>
+
+<section id="home" class="view on">
+<h2>👋 <span data-i="farm_today"></span></h2><div class="mu" id="mode"></div>
+<div class="grid">
+<div class="card met"><span>🌡️</span><b id="mT">--</b><small data-i="heat"></small></div>
+<div class="card met"><span>💧</span><b id="mM">--</b><small data-i="swater"></small><div class="bar"><i id="mB" style="width:0"></i></div></div>
+<div class="card met"><span>💦</span><b id="mH">--</b><small data-i="awet"></small></div>
+<div class="card met"><span>🧪</span><b id="mP">--</b><small data-i="sph"></small></div></div>
+<div class="card"><div class="big">🤖 <span data-i="what_now"></span></div><div id="dec" class="msg"></div>
+<div class="acts"><button class="pri" data-go="entry">📝 <span data-i="enter_today"></span></button><button onclick="speak()">🔊 <span data-i="listen"></span></button></div></div>
+<div class="card"><div class="big">🌦️ <span data-i="wx_title"></span></div><div id="wx" class="mu" style="margin-top:6px"></div>
+<div class="acts"><button class="pri" onclick="wxGo()">📍 <span data-i="wx_btn"></span></button><button id="wxf" hidden onclick="wxFill()">📝 <span data-i="wx_fill"></span></button></div></div>
+<div class="card"><div class="big">🌱 <span data-i="sow_now"></span></div><div id="sow" class="chips" style="margin-top:10px"></div></div>
+<div class="card"><div class="big">🚿 <span data-i="pump"></span></div><p id="pumpt" class="mu"></p>
+<div class="acts"><button class="pri" onclick="pump(1)">💧 <span data-i="start_water"></span></button><button class="dng" onclick="pump(0)">⛔ <span data-i="stop_water"></span></button></div></div>
+<div class="card"><div class="big">💡 <span data-i="tip_day"></span></div><p id="tip"></p></div>
+</section>
+
+<section id="entry" class="view"><h2>📝 <span data-i="e_title"></span></h2><div class="mu" data-i="e_hint"></div>
+<form id="f" class="card form">
+<div class="fld"><label>🌡️ <span data-i="f_temp"></span></label><input name="temperature" type="number" step=".1" min="-10" max="60" required placeholder="30"></div>
+<div class="fld"><label>💦 <span data-i="f_hum"></span></label><input name="humidity" type="number" step=".1" min="0" max="100" required placeholder="55"></div>
+<div class="fld full"><label>💧 <span data-i="f_sm"></span></label><input name="soil_moisture" id="sm" type="number" step=".1" min="0" max="100" required placeholder="35">
+<div class="emo" style="margin-top:8px"><button type="button" data-sm="15">🏜️<br><span data-i="dry"></span></button><button type="button" data-sm="45">🙂<br><span data-i="good"></span></button><button type="button" data-sm="75">🌧️<br><span data-i="wet"></span></button></div></div>
+<div class="fld"><label>🧪 <span data-i="sph"></span></label><input name="ph" type="number" step=".1" min="0" max="14" required value="6.5"></div>
+<div class="fld"><label>☀️ <span data-i="f_sun"></span></label><input name="light_hours" type="number" step=".1" min="0" max="24" value="6" required></div>
+<div class="fld"><label>🪣 <span data-i="f_tank"></span></label><input name="water_level" type="number" step=".1" min="0" max="100" value="70" required></div>
+<div class="fld"><label>📐 <span data-i="f_area"></span></label><input name="area" type="number" step=".01" min=".01" value="1" required></div>
+<div class="fld full"><label>🌾 <span data-i="f_crop"></span></label><select name="crop"></select></div>
+<div class="fld full"><label>🗒️ <span data-i="f_notes"></span></label><input name="notes" data-p="f_notes_ph"></div>
+<div class="full acts"><button class="pri" type="submit">💾 <span data-i="save_adv"></span></button><button type="reset">🧹 <span data-i="clear"></span></button></div></form><div id="fm"></div></section>
+
+<section id="advice" class="view"><h2>🤖 <span data-i="a_title"></span></h2><div class="card" id="ab"></div><div class="acts"><button onclick="speak()">🔊 <span data-i="read"></span></button></div></section>
+
+<section id="scan" class="view"><h2>📷 <span data-i="s_title"></span></h2><div class="mu" data-i="s_hint"></div>
+<div class="card"><div class="form"><div class="fld"><label>🌾 <span data-i="s_crop"></span></label><select id="dcrop"></select></div><div class="fld"><label>📐 <span data-i="s_land"></span></label><input id="dac" type="number" step=".01" min=".01" value="1"></div></div>
+<label class="photo" style="margin-top:12px"><div style="font-size:56px">🍃</div><b data-i="s_tap"></b><input id="leaf" type="file" accept="image/*" capture="environment"></label><canvas id="cv" hidden></canvas><div id="sr"></div>
+<p class="mu">ℹ️ <span data-i="s_note"></span></p></div><h2>🦠 <span data-i="d_title"></span></h2><div id="dg"></div></section>
+
+<section id="crops" class="view"><h2>🌾 <span data-i="c_title"></span></h2><div class="mu" data-i="c_hint"></div>
+<div class="card"><input id="cs" class="in" data-p="c_search"><div class="chips" id="cc" style="margin:10px 0 0"></div></div><div class="crops" id="cg"></div></section>
+
+<section id="bud" class="view"><h2>💰 <span data-i="b_title"></span></h2><div class="mu" data-i="b_hint"></div>
+<div class="card form"><div class="fld full"><label>🌱 <span data-i="b_plant"></span></label><select id="bn"></select></div><div class="fld full"><label>📐 <span data-i="s_land"></span></label><input id="ba" type="number" step=".01" min=".01" value="1"></div></div><div id="bo"></div></section>
+
+<section id="chat" class="view"><h2>💬 <span data-i="ch_title"></span></h2><div class="mu" data-i="ch_hint"></div>
+<details class="card" id="kbox"><summary>🔑 <span data-i="ch_key"></span></summary><p class="mu" data-i="ch_keyhint"></p><div class="acts"><input id="gk" class="in" type="password" data-p="ch_keyph"><button class="pri" id="gks"></button></div></details>
+<div class="card"><div class="chat" id="cm"><div class="b a">🙏 <span data-i="ch_hi"></span></div></div>
+<div class="chips"><button data-q="ch_q1t">🍃 <span data-i="ch_q1"></span></button><button data-q="ch_q2t">💧 <span data-i="ch_q2"></span></button><button data-q="ch_q3t">🐛 <span data-i="ch_q3"></span></button></div>
+<div class="acts"><input id="ci" class="in" data-p="ch_ph"><button class="pri" onclick="ask()">📤 <span data-i="send"></span></button></div></div></section>
+
+<section id="schemes" class="view"><h2>🏛️ <span data-i="sc_title"></span></h2><div class="mu" data-i="sc_hint"></div><div id="scl"></div></section>
+
+<section id="tools" class="view"><h2>🧰 <span data-i="tl_title"></span></h2>
+<div class="card"><div class="big">📐 <span data-i="tl_conv"></span></div><div class="form" style="margin-top:10px"><div class="fld"><label data-i="tl_val"></label><input id="lv" type="number" step="any" min="0" value="1"></div><div class="fld"><label data-i="tl_unit"></label><select id="lu"></select></div></div><div id="lo"></div><p class="mu" data-i="tl_note"></p></div>
+<div class="card"><div class="big">🏪 <span data-i="tl_mkt"></span></div><p class="mu" data-i="tl_mkt2"></p><div class="acts"><a href="https://agmarknet.gov.in" target="_blank" rel="noopener" style="text-decoration:none;flex:1 1 150px"><button class="pri" style="width:100%">Agmarknet</button></a><a href="https://enam.gov.in" target="_blank" rel="noopener" style="text-decoration:none;flex:1 1 150px"><button style="width:100%">eNAM</button></a></div></div>
+<div class="card"><div class="big">📞 <span data-i="tl_kcc"></span></div><p class="mu" data-i="tl_kcc2"></p><div class="acts"><a href="tel:18001801551" style="text-decoration:none;flex:1 1 150px"><button class="pri" style="width:100%">📞 1800-180-1551</button></a></div></div></section>
+
+<section id="enq" class="view"><h2>✉️ <span data-i="en_title"></span></h2><div class="mu" data-i="en_hint"></div>
+<form id="enf" class="card form">
+<div class="fld"><label>👤 <span data-i="en_name"></span></label><input name="name" required></div>
+<div class="fld"><label>📱 <span data-i="en_phone"></span></label><input name="phone" type="tel" required inputmode="tel"></div>
+<div class="fld"><label>📍 <span data-i="en_place"></span></label><input name="place"></div>
+<div class="fld"><label>📧 <span data-i="en_email"></span></label><input name="email" type="email" required inputmode="email"></div>
+<div class="fld full"><label>🌾 <span data-i="f_crop"></span></label><select name="crop" id="ecrop"></select></div>
+<div class="fld full"><label>💭 <span data-i="en_msg"></span></label><textarea name="message" required></textarea></div>
+<div class="full acts"><button class="pri" type="submit">📤 <span data-i="en_send"></span></button></div><div class="full" id="enm"></div></form>
+<div class="card" id="enok" hidden style="text-align:center"><div style="font-size:72px">✅</div><div class="big" data-i="en_sent_title"></div><p data-i="en_ok"></p><div class="acts"><button class="pri" id="ennew" type="button">➕ <span data-i="en_new"></span></button></div></div>
+<div class="card"><div class="big">⭐ <span data-i="rate_title"></span></div><div class="stars" id="stars"></div><textarea id="rc" class="in" style="padding:12px 14px;min-height:80px" data-p="rate_ph"></textarea><div class="acts"><button class="pri" id="rs">📤 <span data-i="rate_send"></span></button></div><div id="rm"></div></div></section>
+
+<section id="hist" class="view"><h2>📊 <span data-i="h_title"></span></h2><div class="card" style="overflow-x:auto" id="hb"></div><div class="acts"><button class="dng" onclick="clr()">🗑️ <span data-i="h_del"></span></button></div></section>
+
+<section id="about" class="view"><h2>📞 <span data-i="ab_title"></span></h2>
+<div class="card"><div class="big">🌱 AgriMind</div><p data-i="ab_help"></p>
+<div class="acts"><a href="tel:+919993477765" style="text-decoration:none;flex:1 1 150px"><button class="pri" style="width:100%">📞 9993477765</button></a><a href="https://wa.me/919993477765" target="_blank" rel="noopener" style="text-decoration:none;flex:1 1 150px"><button style="width:100%">💬 WhatsApp</button></a><a href="mailto:parsaniyashaili@gmail.com" style="text-decoration:none;flex:1 1 150px"><button style="width:100%">📧 Email</button></a></div>
+<p class="mu" style="margin-bottom:0">📧 parsaniyashaili@gmail.com</p></div>
+<h2>🏆 <span data-i="ab_why"></span></h2><div class="pr" id="pr"></div>
+<div class="card"><label class="ck"><input type="checkbox" id="shr"><span data-i="share_lbl"></span></label></div></section>
+
+<footer>🌱 AgriMind • 📞 9993477765 • 📧 parsaniyashaili@gmail.com</footer>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const API='http://127.0.0.1:8000',MAIL='parsaniyashaili@gmail.com';
+/* ====== PUT YOUR GEMINI API KEY HERE so every visitor gets AI answers directly ======
+   Security: anyone can view this file's source. In Google AI Studio / Cloud Console,
+   restrict the key to your website domain and set a small quota. */
+const GEMINI_KEY='';
+const ST={g:k=>{try{return localStorage.getItem(k)}catch(e){return null}},s:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+let hasLang=ST.g('lang')!==null,L=hasLang?(+ST.g('lang')||0):0;
+
+/* ====== TRANSLATIONS [English, Hindi, Gujarati] ====== */
+const T={
+lang_note:["By continuing, you agree that the details you enter and the questions you ask may be shared with the AgriMind team so we can help you.","आगे बढ़ने पर आप मानते हैं कि आपकी दी गई जानकारी और सवाल AgriMind टीम को मदद के लिए भेजे जा सकते हैं।","આગળ વધવાથી તમે સંમત થાઓ છો કે તમે આપેલી માહિતી અને પ્રશ્નો મદદ માટે AgriMind ટીમને મોકલી શકાય છે."],
+t_home:["Home","होम","હોમ"],t_entry:["Enter data","डेटा भरें","માહિતી ભરો"],t_advice:["Advice","सलाह","સલાહ"],t_scan:["Plant check","पौधा जाँच","છોડ તપાસ"],t_crops:["Crops","फसलें","પાક"],t_bud:["Budget","बजट","બજેટ"],t_chat:["Ask AI","AI से पूछें","AI ને પૂછો"],t_schemes:["Schemes","योजनाएं","યોજનાઓ"],t_tools:["Tools","औज़ार","સાધનો"],t_enq:["Enquiry","पूछताछ","પૂછપરછ"],t_hist:["History","रिकॉर्ड","રેકોર્ડ"],t_about:["Contact","संपर्क","સંપર્ક"],
+scroll:["Scroll down to zoom in","ज़ूम के लिए नीचे स्क्रोल करें","ઝૂમ માટે નીચે સ્ક્રોલ કરો"],
+cap1:["Our Earth","हमारी धरती","આપણી ધરતી"],cap2:["India","भारत","ભારત"],cap3:["Where food begins…","जहाँ से अन्न शुरू होता है…","જ્યાંથી અન્ન શરૂ થાય છે…"],cap4:["Let's grow!","चलो उगाएँ!","ચાલો ઉગાડીએ!"],
+h1:["AgriMind<br>Smart Farming","एग्रीमाइंड<br>स्मार्ट खेती","એગ્રીમાઇન્ડ<br>સ્માર્ટ ખેતી"],
+hsub:["Easy advice for water, soil, plants & money","पानी, मिट्टी, पौधों और पैसे की आसान सलाह","પાણી, માટી, છોડ અને પૈસા માટે સરળ સલાહ"],
+start:["Start farming","खेती शुरू करें","ખેતી શરૂ કરો"],
+farm_today:["Your farm today","आपका खेत आज","તમારું ખેતર આજે"],
+heat:["Heat","गर्मी","ગરમી"],swater:["Soil water","मिट्टी में पानी","જમીનમાં પાણી"],awet:["Air wetness","हवा में नमी","હવામાં ભેજ"],sph:["Soil pH","मिट्टी pH","જમીન pH"],
+what_now:["What should I do now?","मुझे अभी क्या करना चाहिए?","મારે હવે શું કરવું?"],
+tap_enter:["Tap “Enter data” to get advice.","सलाह के लिए “डेटा भरें” दबाएँ।","સલાહ માટે “માહિતી ભરો” દબાવો."],
+enter_today:["Enter today's data","आज का डेटा भरें","આજની માહિતી ભરો"],listen:["Listen","सुनें","સાંભળો"],
+pump:["Water pump","पानी का पंप","પાણીનો પંપ"],pump_off:["Pump is OFF","पंप बंद है","પંપ બંધ છે"],pump_on:["Pump is RUNNING","पंप चालू है","પંપ ચાલુ છે"],practice:["(practice mode)","(अभ्यास मोड)","(પ્રેક્ટિસ મોડ)"],
+start_water:["Start water","पानी चालू करें","પાણી ચાલુ કરો"],stop_water:["Stop water","पानी बंद करें","પાણી બંધ કરો"],
+tip_day:["Tip of the day","आज की सलाह","આજની ટીપ"],
+mode_on:["Connected to farm server","फार्म सर्वर से जुड़ा है","ફાર્મ સર્વર સાથે જોડાયેલ"],mode_off:["Your data is saved on this phone","आपका डेटा इस फोन में सेव है","તમારી માહિતી આ ફોનમાં સેવ છે"],
+sow_now:["Sow / plant this month","इस महीने बोएँ / लगाएँ","આ મહિને વાવો / રોપો"],sow_none:["No crops listed for this month.","इस महीने के लिए कोई फसल नहीं।","આ મહિના માટે કોઈ પાક નથી."],
+wx_title:["Weather at my farm","मेरे खेत का मौसम","મારા ખેતરનું હવામાન"],wx_btn:["Use my location","मेरी लोकेशन लें","મારું લોકેશન વાપરો"],wx_now:["Now","अभी","હમણાં"],wx_rain:["Rain chance (next 3 days)","बारिश की संभावना (अगले 3 दिन)","વરસાદની શક્યતા (આગામી 3 દિવસ)"],wx_fill:["Use in my data","मेरे डेटा में भरें","મારી માહિતીમાં ભરો"],
+wx_err:["Could not get weather. Allow location and check internet.","मौसम नहीं मिला। लोकेशन की अनुमति दें और इंटरनेट देखें।","હવામાન મળ્યું નથી. લોકેશનની મંજૂરી આપો અને ઇન્ટરનેટ તપાસો."],wx_wait:["Loading…","लोड हो रहा है…","લોડ થાય છે…"],wx_idle:["Tap the button to see today's weather and rain chance.","आज का मौसम और बारिश की संभावना देखने के लिए बटन दबाएँ।","આજનું હવામાન અને વરસાદની શક્યતા જોવા બટન દબાવો."],
+e_title:["Enter today's data","आज का डेटा भरें","આજની માહિતી ભરો"],e_hint:["Tap the pictures if you don't know the number.","संख्या न पता हो तो चित्र दबाएँ।","આંકડો ખબર ન હોય તો ચિત્ર દબાવો."],
+f_temp:["Heat (°C)","गर्मी (°C)","ગરમી (°C)"],f_hum:["Air wetness (%)","हवा में नमी (%)","હવામાં ભેજ (%)"],f_sm:["Soil water (%)","मिट्टी में पानी (%)","જમીનમાં પાણી (%)"],
+dry:["Dry","सूखी","સૂકી"],good:["Good","ठीक","સારું"],wet:["Wet","गीली","ભીની"],
+f_sun:["Sun hours / day","धूप के घंटे / दिन","તડકાના કલાક / દિવસ"],f_tank:["Water in tank (%)","टंकी में पानी (%)","ટાંકીમાં પાણી (%)"],f_area:["Farm size (acre)","खेत का आकार (एकड़)","ખેતરનું કદ (એકર)"],f_crop:["Crop","फसल","પાક"],f_notes:["Notes (optional)","नोट (वैकल्पिक)","નોંધ (વૈકલ્પિક)"],f_notes_ph:["e.g. leaves look dry","जैसे: पत्ते सूखे दिख रहे हैं","દા.ત. પાંદડા સૂકા લાગે છે"],
+save_adv:["Save & get advice","सेव करें और सलाह लें","સેવ કરો અને સલાહ લો"],clear:["Clear","साफ करें","સાફ કરો"],saved:["Saved! See your advice.","सेव हो गया! अपनी सलाह देखें।","સેવ થયું! તમારી સલાહ જુઓ."],
+a_title:["My advice","मेरी सलाह","મારી સલાહ"],a_empty:["Save farm data first","पहले खेत का डेटा सेव करें","પહેલા ખેતરની માહિતી સેવ કરો"],read:["Read aloud","पढ़कर सुनाएँ","વાંચીને સંભળાવો"],
+w_now:["Water the crop now","फसल को अभी पानी दें","પાકને હમણાં પાણી આપો"],w_no:["No water needed now","अभी पानी की ज़रूरत नहीं","હમણાં પાણીની જરૂર નથી"],
+ir_empty:["Tank is empty! Fill water first.","टंकी खाली है! पहले पानी भरें।","ટાંકી ખાલી છે! પહેલા પાણી ભરો."],ir_dry:["Soil is dry ({0}%). Plants need water.","मिट्टी सूखी है ({0}%)। पौधों को पानी चाहिए।","જમીન સૂકી છે ({0}%). છોડને પાણી જોઈએ."],ir_ok:["Soil has enough water ({0}%).","मिट्टी में पर्याप्त पानी है ({0}%)।","જમીનમાં પૂરતું પાણી છે ({0}%)."],
+heat_lbl:["Heat: {0}","गर्मी: {0}","ગરમી: {0}"],hot:["Too hot","बहुत गर्म","બહુ ગરમ"],cold:["Too cold","बहुत ठंडा","બહુ ઠંડુ"],
+tt_hot:["Give shade net and water in the evening.","शेड नेट लगाएँ और शाम को पानी दें।","શેડ નેટ લગાવો અને સાંજે પાણી આપો."],tt_cold:["Cover plants at night.","रात में पौधों को ढकें।","રાત્રે છોડને ઢાંકો."],tt_good:["Heat is fine for plants.","गर्मी पौधों के लिए ठीक है।","ગરમી છોડ માટે બરાબર છે."],
+soil_lbl:["Soil: {0}","मिट्टी: {0}","જમીન: {0}"],acid:["Acidic","अम्लीय","એસિડિક"],alk:["Alkaline","क्षारीय","ક્ષારયુક્ત"],
+pt_acid:["Add a little lime or wood ash.","थोड़ा चूना या लकड़ी की राख डालें।","થોડો ચૂનો અથવા લાકડાની રાખ નાખો."],pt_alk:["Add compost or cow-dung manure.","कम्पोस्ट या गोबर की खाद डालें।","કમ્પોસ્ટ અથવા છાણિયું ખાતર નાખો."],pt_good:["Soil is balanced.","मिट्टी संतुलित है।","જમીન સંતુલિત છે."],
+likes:["{0} likes this weather","{0} को यह मौसम पसंद है","{0} ને આ હવામાન માફક આવે છે"],struggle:["{0} may struggle in this heat/cold","{0} को इस गर्मी/ठंड में दिक्कत हो सकती है","{0} ને આ ગરમી/ઠંડીમાં મુશ્કેલી પડી શકે"],
+do_water:["Please water your plants now.","कृपया अभी पौधों को पानी दें।","કૃપા કરીને હમણાં છોડને પાણી આપો."],all_good:["All good. Check again tomorrow.","सब ठीक है। कल फिर देखें।","બધું બરાબર છે. કાલે ફરી જુઓ."],
+s_title:["Plant check","पौधा जाँच","છોડ તપાસ"],s_hint:["Take a clear photo of one leaf.","एक पत्ते की साफ फोटो लें।","એક પાંદડાનો સ્પષ્ટ ફોટો લો."],s_crop:["Which crop?","कौन सी फसल?","કયો પાક?"],s_land:["My land (acre)","मेरी ज़मीन (एकड़)","મારી જમીન (એકર)"],s_tap:["Tap to take / choose photo","फोटो लेने / चुनने के लिए दबाएँ","ફોટો લેવા / પસંદ કરવા દબાવો"],
+s_note:["Simple colour check only. For a sure answer, show the leaf to a local expert.","यह सिर्फ साधारण रंग जाँच है। पक्के जवाब के लिए पत्ता स्थानीय विशेषज्ञ को दिखाएँ।","આ માત્ર સાદી રંગ તપાસ છે. ચોક્કસ જવાબ માટે પાંદડું સ્થાનિક નિષ્ણાતને બતાવો."],
+s_ok:["Leaf looks healthy","पत्ता स्वस्थ दिखता है","પાંદડું સ્વસ્થ દેખાય છે"],s_some:["Some yellow/brown spots","कुछ पीले/भूरे धब्बे","થોડા પીળા/ભૂરા ડાઘ"],s_many:["Many spots – possible disease","बहुत धब्बे – बीमारी हो सकती है","ઘણા ડાઘ – રોગ હોઈ શકે"],s_bad:["Unhealthy colour","खराब रंग","ખરાબ રંગ"],
+s_keep:["Keep watering and checking daily.","पानी देते रहें और रोज़ जाँचें।","પાણી આપતા રહો અને રોજ તપાસો."],s_act:["Remove bad leaves, keep air flowing, avoid wetting leaves. Show to a local expert.","खराब पत्ते हटाएँ, हवा आने दें, पत्तों को गीला न करें। स्थानीय विशेषज्ञ को दिखाएँ।","ખરાબ પાંદડા કાઢો, હવા આવવા દો, પાંદડા ભીના ન કરો. સ્થાનિક નિષ્ણાતને બતાવો."],
+d_title:["Diseases, medicine & cost","रोग, दवा और खर्च","રોગ, દવા અને ખર્ચ"],
+d_safe:["Wear gloves & mask. Spray when no wind. Mix in about 200 litre water per acre. Follow the label and wait days before harvest. Prices are approximate. General guide only – confirm with your local KVK.","दस्ताने और मास्क पहनें। हवा न हो तब छिड़कें। प्रति एकड़ लगभग 200 लीटर पानी में मिलाएँ। लेबल मानें और कटाई से पहले प्रतीक्षा अवधि रखें। कीमतें अनुमानित हैं। यह सामान्य मार्गदर्शन है – स्थानीय KVK से पुष्टि करें।","હાથમોજાં અને માસ્ક પહેરો. પવન ન હોય ત્યારે છંટકાવ કરો. એકર દીઠ આશરે 200 લિટર પાણીમાં ભેળવો. લેબલ મુજબ કરો અને લણણી પહેલાં રાહ જુઓ. ભાવ અંદાજિત છે. આ સામાન્ય માર્ગદર્શન છે – સ્થાનિક KVK પાસે ખાતરી કરો."],
+d_qty:["For {0} acre: {1} × {2} spray(s)","{0} एकड़ के लिए: {1} × {2} बार छिड़काव","{0} એકર માટે: {1} × {2} વાર છંટકાવ"],dz_cost:["About {0}","लगभग {0}","આશરે {0}"],
+c_title:["Crop guide","फसल गाइड","પાક માર્ગદર્શિકા"],c_hint:["Tap a crop to see full details. Figures are typical India averages (ICAR / state agriculture department type sources); real values change by place, variety and year.","पूरी जानकारी के लिए फसल दबाएँ। आँकड़े भारत के सामान्य औसत हैं (ICAR / राज्य कृषि विभाग जैसे स्रोत); असली मान जगह, किस्म और साल के साथ बदलते हैं।","સંપૂર્ણ માહિતી માટે પાક દબાવો. આંકડા ભારતના સામાન્ય સરેરાશ છે (ICAR / રાજ્ય કૃષિ વિભાગ જેવા સ્રોત); વાસ્તવિક મૂલ્ય જગ્યા, જાત અને વર્ષ મુજબ બદલાય છે."],
+c_search:["Search crop…","फसल खोजें…","પાક શોધો…"],c_all:["All","सभी","બધા"],
+c_cer:["Cereals","अनाज","અનાજ"],c_pul:["Pulses","दालें","કઠોળ"],c_oil:["Oilseeds","तिलहन","તેલીબિયાં"],c_veg:["Vegetables","सब्जियाँ","શાકભાજી"],c_fru:["Fruits","फल","ફળો"],c_spi:["Spices","मसाले","મસાલા"],c_cash:["Cash crops","नकदी फसलें","રોકડિયા પાક"],c_pla:["Plantation","बागान फसलें","વાવેતર પાક"],
+d_season:["Season","मौसम","ઋતુ"],d_temp:["Heat range","तापमान","તાપમાન"],d_ph:["Soil pH","मिट्टी pH","જમીન pH"],d_rain:["Rain / water (mm)","बारिश / पानी (मिमी)","વરસાદ / પાણી (મિમી)"],d_days:["Days to harvest","कटाई तक दिन","લણણી સુધી દિવસ"],d_soil:["Best soil","सबसे अच्छी मिट्टी","શ્રેષ્ઠ જમીન"],d_sow:["Sow / plant in","बोने / लगाने का समय","વાવણી / રોપણી સમય"],d_yield:["Yield per acre","प्रति एकड़ उपज","એકર દીઠ ઉત્પાદન"],d_ccost:["Cost per acre","प्रति एकड़ खर्च","એકર દીઠ ખર્ચ"],d_price:["Price (approx.)","भाव (अनुमानित)","ભાવ (અંદાજિત)"],d_states:["Grown mostly in","मुख्य राज्य","મુખ્ય રાજ્યો"],d_tip:["Tip","सुझाव","સૂચન"],
+go_bud:["See budget","बजट देखें","બજેટ જુઓ"],go_dis:["Diseases & medicine","रोग और दवा","રોગ અને દવા"],
+sK:["Kharif (Jun–Oct)","खरीफ (जून–अक्टूबर)","ખરીફ (જૂન–ઑક્ટો)"],sR:["Rabi (Oct–Mar)","रबी (अक्टूबर–मार्च)","રવી (ઑક્ટો–માર્ચ)"],sZ:["Zaid (Mar–Jun)","जायद (मार्च–जून)","ઉનાળુ (માર્ચ–જૂન)"],sY:["Year-round / perennial","सालभर / बारहमासी","આખું વર્ષ / બારમાસી"],
+so_a:["Alluvial","जलोढ़","કાંપવાળી"],so_b:["Black","काली","કાળી"],so_r:["Red","लाल","લાલ"],so_l:["Loamy","दोमट","ગોરાડુ"],so_s:["Sandy","बलुई","રેતાળ"],so_c:["Clay","चिकनी","ચીકણી"],so_h:["Hill soil","पहाड़ी","પહાડી"],so_e:["Laterite","लेटराइट","લેટેરાઇટ"],
+kg:["kg","किलो","કિલો"],nut:["nuts","नारियल","નાળિયેર"],yearly:["Yearly (tree crop)","सालाना (पेड़ वाली फसल)","વાર્ષિક (વૃક્ષ પાક)"],
+tp_cer:["Use certified seed. Give water at tillering and grain filling.","प्रमाणित बीज लें। कल्ले फूटते समय और दाना भरते समय पानी दें।","પ્રમાણિત બીજ વાપરો. ફૂટ અને દાણા ભરાતી વખતે પાણી આપો."],
+tp_pul:["Pulses fix nitrogen. Avoid water-logging and treat the seed.","दालें नाइट्रोजन बनाती हैं। जलभराव से बचें और बीज उपचार करें।","કઠોળ નાઇટ્રોજન બનાવે છે. પાણી ભરાવો ટાળો અને બીજ માવજત કરો."],
+tp_oil:["Sow on time. Give light water at flowering and pod filling.","समय पर बोएँ। फूल और फली भरते समय हल्का पानी दें।","સમયસર વાવો. ફૂલ અને શિંગ ભરાતી વખતે હળવું પાણી આપો."],
+tp_veg:["Use mulch, drip water and check under leaves for insects daily.","मल्चिंग और ड्रिप का उपयोग करें, रोज़ पत्तों के नीचे कीट देखें।","મલ્ચિંગ અને ટપક સિંચાઈ વાપરો, રોજ પાંદડા નીચે જીવાત જુઓ."],
+tp_fru:["Prune on time, add compost every year and protect young plants from heat and frost.","समय पर कटाई-छँटाई करें, हर साल कम्पोस्ट डालें, छोटे पौधों को गर्मी-पाले से बचाएँ।","સમયસર કાપકૂપ કરો, દર વર્ષે કમ્પોસ્ટ નાખો, નાના છોડને ગરમી-હિમથી બચાવો."],
+tp_spi:["Use disease-free seed or rhizome. Good drainage is a must; dry well before storing.","रोगमुक्त बीज/गाँठ लें। पानी निकासी ज़रूरी है; भंडारण से पहले अच्छे से सुखाएँ।","રોગમુક્ત બીજ/ગાંઠ વાપરો. પાણીનો નિકાલ જરૂરી; સંગ્રહ પહેલાં સારી રીતે સૂકવો."],
+tp_cash:["Plan water and labour early; sell at the notified price (MSP/FRP) where available.","पानी और मज़दूरी की पहले योजना बनाएँ; जहाँ उपलब्ध हो घोषित भाव (MSP/FRP) पर बेचें।","પાણી અને મજૂરીનું વહેલું આયોજન કરો; જ્યાં હોય ત્યાં જાહેર ભાવ (MSP/FRP) પર વેચો."],
+tp_pla:["Long-term crop: use good planting material and give regular care for years.","लंबे समय की फसल: अच्छे पौधे लगाएँ और वर्षों तक नियमित देखभाल करें।","લાંબા ગાળાનો પાક: સારા રોપા વાપરો અને વર્ષો સુધી નિયમિત કાળજી લો."],
+b_title:["Farming budget","खेती का बजट","ખેતીનું બજેટ"],b_hint:["Money in ₹ (rupees). Land in acre.","₹ (रुपये) में पैसा। ज़मीन एकड़ में।","₹ (રૂપિયા) માં પૈસા. જમીન એકરમાં."],b_plant:["Plant name","पौधे का नाम","છોડનું નામ"],b_item:["Item","मद","વિગત"],b_1:["1 acre","1 एकड़","1 એકર"],b_n:["{0} acre","{0} एकड़","{0} એકર"],
+i_seed:["Seeds / plants","बीज / पौधे","બીજ / રોપા"],i_land:["Land work","ज़मीन का काम","જમીનનું કામ"],i_fert:["Fertilizer","खाद","ખાતર"],i_med:["Medicine & spray","दवा और छिड़काव","દવા અને છંટકાવ"],i_lab:["Labour","मज़दूरी","મજૂરી"],i_wat:["Water","पानी","પાણી"],i_oth:["Other","अन्य","અન્ય"],
+b_total:["Total cost","कुल खर्च","કુલ ખર્ચ"],b_harv:["Harvest","उपज","ઉત્પાદન"],b_inc:["Income (₹{0}/{1})","आमदनी (₹{0}/{1})","આવક (₹{0}/{1})"],b_profit:["Profit","मुनाफा","નફો"],b_loss:["Loss","नुकसान","નુકસાન"],b_days:["days","दिन","દિવસ"],
+b_keep:["Keep {0} ready (10% extra for rain, disease & price drop).","{0} तैयार रखें (बारिश, रोग और भाव गिरने के लिए 10% अतिरिक्त)।","{0} તૈયાર રાખો (વરસાદ, રોગ અને ભાવ ઘટવા માટે 10% વધારાના)."],
+b_note:["Approximate Indian averages. Real cost and market price change by place and season.","भारत के अनुमानित औसत। असली खर्च और बाज़ार भाव जगह और मौसम के साथ बदलते हैं।","ભારતના અંદાજિત સરેરાશ. વાસ્તવિક ખર્ચ અને બજાર ભાવ જગ્યા અને ઋતુ મુજબ બદલાય છે."],
+b_peren:["Tree crops: yearly figures once plants are fully grown (first harvest may take 2–6 years).","पेड़ वाली फसलें: पौधे पूरे बड़े होने पर सालाना आँकड़े (पहली उपज में 2–6 साल लग सकते हैं)।","વૃક્ષ પાક: છોડ પૂરા ઉછરે ત્યારના વાર્ષિક આંકડા (પહેલું ઉત્પાદન 2–6 વર્ષ લાગી શકે)."],
+ch_title:["Ask any doubt","कोई भी सवाल पूछें","કોઈપણ પ્રશ્ન પૂછો"],ch_hint:["Write in Hindi, Gujarati or English. You get the answer instantly.","हिंदी, गुजराती या अंग्रेज़ी में लिखें। जवाब तुरंत मिलेगा।","હિન્દી, ગુજરાતી કે અંગ્રેજીમાં લખો. જવાબ તરત મળશે."],
+ch_key:["Gemini key (one time)","Gemini key (एक बार)","Gemini key (એક વાર)"],ch_keyhint:["Free key: aistudio.google.com. Saved only on this phone.","मुफ़्त key: aistudio.google.com। सिर्फ इस फोन में सेव होती है।","મફત key: aistudio.google.com. માત્ર આ ફોનમાં સેવ થાય છે."],ch_keyph:["Paste Gemini API key","Gemini API key यहाँ चिपकाएँ","Gemini API key અહીં પેસ્ટ કરો"],save:["Save","सेव","સેવ"],saved_ok:["Saved ✅","सेव हो गया ✅","સેવ થયું ✅"],
+ch_hi:["Namaste! Ask me about plants, water, insects, medicine or money.","नमस्ते! पौधों, पानी, कीड़ों, दवा या पैसे के बारे में पूछें।","નમસ્તે! છોડ, પાણી, જીવાત, દવા કે પૈસા વિશે પૂછો."],
+ch_q1:["Yellow leaves","पीले पत्ते","પીળા પાંદડા"],ch_q1t:["My crop leaves are turning yellow. What should I do?","मेरी फसल के पत्ते पीले हो रहे हैं। मुझे क्या करना चाहिए?","મારા પાકના પાંદડા પીળા થઈ રહ્યા છે. મારે શું કરવું?"],
+ch_q2:["Water","पानी","પાણી"],ch_q2t:["How much water does my crop need?","मेरी फसल को कितना पानी चाहिए?","મારા પાકને કેટલું પાણી જોઈએ?"],
+ch_q3:["Insects","कीड़े","જીવાત"],ch_q3t:["Insects are eating my plants. Which medicine should I use?","कीड़े मेरे पौधे खा रहे हैं। कौन सी दवा इस्तेमाल करूँ?","જીવાત મારા છોડ ખાય છે. કઈ દવા વાપરું?"],
+ch_ph:["Type your doubt…","अपना सवाल लिखें…","તમારો પ્રશ્ન લખો…"],send:["Send","भेजें","મોકલો"],think:["Thinking…","सोच रहा हूँ…","વિચારું છું…"],
+ch_err:["Gemini could not answer: {0}","Gemini जवाब नहीं दे सका: {0}","Gemini જવાબ આપી શક્યું નહીં: {0}"],
+ch_nokey:["AI key is not set yet. The site owner must add the Gemini key (or paste one above).","AI key अभी नहीं डाली गई है। साइट मालिक को Gemini key डालनी होगी (या ऊपर चिपकाएँ)।","AI key હજી મૂકી નથી. સાઇટ માલિકે Gemini key મૂકવી પડશે (અથવા ઉપર પેસ્ટ કરો)."],
+sc_title:["Government schemes","सरकारी योजनाएं","સરકારી યોજનાઓ"],sc_hint:["Real central schemes for farmers. Check the official site for the latest rules.","किसानों के लिए असली केंद्रीय योजनाएं। ताज़ा नियम आधिकारिक साइट पर देखें।","ખેડૂતો માટે સાચી કેન્દ્રીય યોજનાઓ. તાજા નિયમો સત્તાવાર સાઇટ પર જુઓ."],sc_open:["Open official site","आधिकारिक साइट खोलें","સત્તાવાર સાઇટ ખોલો"],
+tl_title:["Handy tools","काम के औज़ार","કામના સાધનો"],tl_conv:["Land converter","ज़मीन कनवर्टर","જમીન કન્વર્ટર"],tl_val:["Value","मान","કિંમત"],tl_unit:["From unit","इकाई","એકમ"],
+tl_note:["Bigha size differs by state. Gujarat ≈ 0.4 acre (16 guntha).","बीघा का आकार राज्य के अनुसार अलग होता है। गुजरात ≈ 0.4 एकड़ (16 गुंठा)।","વીઘાનું કદ રાજ્ય મુજબ અલગ હોય છે. ગુજરાત ≈ 0.4 એકર (16 ગુંઠા)."],
+u_acre:["Acre","एकड़","એકર"],u_ha:["Hectare","हेक्टेयर","હેક્ટર"],u_guntha:["Guntha","गुंठा","ગુંઠા"],u_bigha:["Bigha (Gujarat)","बीघा (गुजरात)","વીઘા (ગુજરાત)"],u_sqm:["Sq. metre","वर्ग मीटर","ચોરસ મીટર"],
+tl_mkt:["Market prices (mandi)","मंडी भाव","બજાર ભાવ"],tl_mkt2:["See today's official mandi prices before you sell.","बेचने से पहले आज के आधिकारिक मंडी भाव देखें।","વેચતા પહેલા આજના સત્તાવાર બજાર ભાવ જુઓ."],
+tl_kcc:["Kisan Call Centre","किसान कॉल सेंटर","કિસાન કોલ સેન્ટર"],tl_kcc2:["Free expert farming advice by phone.","फोन पर मुफ़्त कृषि विशेषज्ञ सलाह।","ફોન પર મફત કૃષિ નિષ્ણાત સલાહ."],
+en_title:["Enquiry / Ask for help","पूछताछ / मदद माँगें","પૂછપરછ / મદદ માંગો"],en_hint:["Send your doubt. Our team will see it directly and contact you.","अपना सवाल भेजें। हमारी टीम सीधे देखेगी और आपसे संपर्क करेगी।","તમારો પ્રશ્ન મોકલો. અમારી ટીમ સીધું જોશે અને તમારો સંપર્ક કરશે."],
+en_name:["Your name","आपका नाम","તમારું નામ"],en_phone:["Phone / WhatsApp number","फोन / WhatsApp नंबर","ફોન / WhatsApp નંબર"],en_place:["Village / District / State","गाँव / ज़िला / राज्य","ગામ / જિલ્લો / રાજ્ય"],en_email:["Email","ईमेल","ઇમેઇલ"],en_sent_title:["Mail sent!","मेल भेज दिया गया!","મેઇલ મોકલાઈ ગયો!"],en_new:["New enquiry","नई पूछताछ","નવી પૂછપરછ"],en_msg:["Your doubt or problem","आपका सवाल या समस्या","તમારો પ્રશ્ન અથવા સમસ્યા"],
+en_send:["Send enquiry","पूछताछ भेजें","પૂછપરછ મોકલો"],en_need:["Please fill name, phone, email and your doubt.","कृपया नाम, फोन, ईमेल और अपना सवाल भरें।","કૃપા કરીને નામ, ફોન, ઇમેઇલ અને પ્રશ્ન ભરો."],en_ok:["Sent! We will contact you soon.","भेज दिया! हम जल्द संपर्क करेंगे।","મોકલાઈ ગયું! અમે જલ્દી સંપર્ક કરીશું."],en_fail:["Could not send automatically. Please send on WhatsApp or call us.","अपने आप नहीं जा सका। कृपया WhatsApp पर भेजें या कॉल करें।","આપમેળે મોકલાયું નહીં. કૃપા કરીને WhatsApp પર મોકલો અથવા કૉલ કરો."],en_wa:["Send on WhatsApp","WhatsApp पर भेजें","WhatsApp પર મોકલો"],sending:["Sending…","भेज रहे हैं…","મોકલી રહ્યા છીએ…"],
+rate_title:["Rate AgriMind","AgriMind को रेटिंग दें","AgriMind ને રેટિંગ આપો"],rate_ph:["Tell us how we can improve (optional)","हम कैसे बेहतर बनें बताएँ (वैकल्पिक)","અમે કેવી રીતે સુધારી શકીએ તે જણાવો (વૈકલ્પિક)"],rate_send:["Send feedback","फीडबैक भेजें","ફીડબેક મોકલો"],rate_thanks:["Thank you! 🙏","धन्यवाद! 🙏","આભાર! 🙏"],rate_pick:["Please tap a star first.","पहले एक तारा दबाएँ।","પહેલા એક તારો દબાવો."],
+h_title:["My records","मेरे रिकॉर्ड","મારા રેકોર્ડ"],h_none:["No records yet","अभी कोई रिकॉर्ड नहीं","હજી કોઈ રેકોર્ડ નથી"],h_del:["Delete all records","सभी रिकॉर्ड मिटाएँ","બધા રેકોર્ડ ભૂંસો"],h_conf:["Delete all records?","सभी रिकॉर्ड मिटाएँ?","બધા રેકોર્ડ ભૂંસી નાખવા?"],
+ab_title:["Contact us","हमसे संपर्क करें","અમારો સંપર્ક કરો"],ab_help:["We read every farmer's doubt personally. Call, WhatsApp or email us anytime – or use the Enquiry page.","हम हर किसान का सवाल खुद पढ़ते हैं। कभी भी कॉल, WhatsApp या ईमेल करें – या पूछताछ पेज इस्तेमाल करें।","અમે દરેક ખેડૂતનો પ્રશ્ન જાતે વાંચીએ છીએ. ગમે ત્યારે કૉલ, WhatsApp કે ઇમેઇલ કરો – અથવા પૂછપરછ પેજ વાપરો."],
+ab_why:["Why AgriMind?","AgriMind क्यों?","AgriMind કેમ?"],
+share_lbl:["Share my farm data & questions with the AgriMind team so they can help me","मेरा खेत का डेटा और सवाल AgriMind टीम को भेजें ताकि वे मदद कर सकें","મારી ખેતરની માહિતી અને પ્રશ્નો AgriMind ટીમને મોકલો જેથી તેઓ મદદ કરી શકે"],
+pr1:["In your language","आपकी भाषा में","તમારી ભાષામાં"],pr1t:["Full site in English, Hindi and Gujarati.","पूरी साइट अंग्रेज़ी, हिंदी और गुजराती में।","આખી સાઇટ અંગ્રેજી, હિન્દી અને ગુજરાતીમાં."],
+pr2:["Crops of India","भारत की फसलें","ભારતના પાક"],pr2t:["{0} crops – cereals, pulses, oilseeds, vegetables, fruits, spices and more – with season, soil, yield and cost.","{0} फसलें – अनाज, दालें, तिलहन, सब्ज़ियाँ, फल, मसाले और बहुत कुछ – मौसम, मिट्टी, उपज और खर्च के साथ।","{0} પાક – અનાજ, કઠોળ, તેલીબિયાં, શાકભાજી, ફળો, મસાલા અને ઘણું – ઋતુ, જમીન, ઉત્પાદન અને ખર્ચ સાથે."],
+pr3:["Smart AI helper","स्मार्ट AI सहायक","સ્માર્ટ AI સહાયક"],pr3t:["Ask any farming doubt and get a simple answer from AI.","खेती का कोई भी सवाल पूछें और AI से आसान जवाब पाएँ।","ખેતીનો કોઈપણ પ્રશ્ન પૂછો અને AI પાસેથી સરળ જવાબ મેળવો."],
+pr4:["Know your profit","अपना मुनाफ़ा जानें","તમારો નફો જાણો"],pr4t:["Plan cost, harvest and income before you sow.","बोने से पहले खर्च, उपज और आमदनी की योजना बनाएँ।","વાવણી પહેલા ખર્ચ, ઉત્પાદન અને આવકનું આયોજન કરો."],
+pr5:["Easy for everyone","सबके लिए आसान","બધા માટે સરળ"],pr5t:["Big buttons, pictures and voice advice – made for farmers.","बड़े बटन, चित्र और आवाज़ में सलाह – किसानों के लिए बना।","મોટા બટન, ચિત્રો અને અવાજમાં સલાહ – ખેડૂતો માટે બનાવેલ."],
+pr6:["Free to use","मुफ़्त","મફત"],pr6t:["No sign-up, no fee. Your records stay on your phone.","न साइन-अप, न शुल्क। आपके रिकॉर्ड आपके फोन में रहते हैं।","કોઈ સાઇન-અપ નહીં, કોઈ ફી નહીં. તમારા રેકોર્ડ તમારા ફોનમાં રહે છે."]
+};
+const t=(k,...a)=>{let s=(T[k]||[k,k,k])[L]||T[k][0];a.forEach((v,i)=>s=s.split('{'+i+'}').join(v));return s};
+const LNAME=['English','Hindi','Gujarati'],SPK=['en-IN','hi-IN','gu-IN'];
+
+/* ====== STATES ====== */
+const SN={UP:["Uttar Pradesh","उत्तर प्रदेश","ઉત્તર પ્રદેશ"],MP:["Madhya Pradesh","मध्य प्रदेश","મધ્ય પ્રદેશ"],PB:["Punjab","पंजाब","પંજાબ"],HR:["Haryana","हरियाणा","હરિયાણા"],RJ:["Rajasthan","राजस्थान","રાજસ્થાન"],BR:["Bihar","बिहार","બિહાર"],WB:["West Bengal","पश्चिम बंगाल","પશ્ચિમ બંગાળ"],OD:["Odisha","ओडिशा","ઓડિશા"],AP:["Andhra Pradesh","आंध्र प्रदेश","આંધ્ર પ્રદેશ"],TG:["Telangana","तेलंगाना","તેલંગાણા"],KA:["Karnataka","कर्नाटक","કર્ણાટક"],TN:["Tamil Nadu","तमिलनाडु","તમિલનાડુ"],KL:["Kerala","केरल","કેરળ"],MH:["Maharashtra","महाराष्ट्र","મહારાષ્ટ્ર"],GJ:["Gujarat","गुजरात","ગુજરાત"],AS:["Assam","असम","આસામ"],JK:["Jammu & Kashmir","जम्मू और कश्मीर","જમ્મુ અને કાશ્મીર"],HP:["Himachal Pradesh","हिमाचल प्रदेश","હિમાચલ પ્રદેશ"],UK:["Uttarakhand","उत्तराखंड","ઉત્તરાખંડ"],CG:["Chhattisgarh","छत्तीसगढ़","છત્તીસગઢ"]};
+
+/* ====== CROPS ======
+ [id,emoji,en,hi,gu,category,season(K/R/Z/Y),tmin,tmax,pHmin,pHmax,rainMin,rainMax,days,soil,sowMonths,yield kg/acre,cost ₹/acre,price ₹/kg,states]
+ Typical Indian averages (ICAR / state agriculture dept. type figures; prices ≈ MSP / common mandi range). Approximate. */
+const RAW=[
+['rice','🌾','Rice (Paddy)','चावल (धान)','ચોખા (ડાંગર)','cer','K',20,35,5.5,7,1000,2000,140,'ac','6,7',1800,28000,24,'WB,UP,PB,AP,TG,OD'],
+['wheat','🌾','Wheat','गेहूं','ઘઉં','cer','R',12,25,6,7.5,400,750,135,'al','10,11,12',1600,18000,26,'UP,MP,PB,HR,RJ,BR'],
+['maize','🌽','Maize','मक्का','મકાઈ','cer','KR',21,27,5.8,7,500,800,100,'ls','6,7,10',1800,18000,22,'KA,MP,MH,BR,TG,RJ'],
+['sorghum','🌾','Sorghum (Jowar)','ज्वार','જુવાર','cer','KR',25,32,6,8.5,400,600,110,'br','6,7,9,10',800,12000,35,'MH,KA,RJ,MP,GJ,TG'],
+['bajra','🌾','Pearl millet (Bajra)','बाजरा','બાજરી','cer','K',25,35,6.5,8,300,500,85,'sl','6,7',700,9000,28,'RJ,UP,HR,GJ,MH'],
+['ragi','🌾','Finger millet (Ragi)','रागी (मंडुआ)','નાગલી','cer','K',20,30,5,8,500,900,110,'rl','6,7',700,12000,45,'KA,TN,UK,MH,AP'],
+['barley','🌾','Barley','जौ','જવ','cer','R',12,25,6.5,7.8,300,500,120,'al','10,11',1200,14000,20,'RJ,UP,MP,HR,PB'],
+['chana','🫘','Chickpea (Chana)','चना','ચણા','pul','R',15,30,6,8,400,600,110,'bl','10,11',600,14000,57,'MP,RJ,MH,UP,KA,GJ'],
+['tur','🫘','Pigeon pea (Tur)','अरहर (तूर)','તુવેર','pul','K',20,30,6,7.5,600,1000,170,'br','6,7',450,14000,78,'MH,KA,MP,UP,GJ,TG'],
+['moong','🫘','Green gram (Moong)','मूंग','મગ','pul','KZ',25,35,6.2,7.2,600,1000,65,'ls','3,4,6,7',350,10000,85,'RJ,MH,MP,GJ,KA,TG'],
+['urad','🫘','Black gram (Urad)','उड़द','અડદ','pul','K',25,35,6.5,7.8,600,1000,80,'lb','6,7',350,10000,75,'MP,UP,MH,AP,RJ'],
+['masoor','🫘','Lentil (Masoor)','मसूर','મસૂર','pul','R',15,25,6,8,300,500,120,'al','10,11',500,11000,65,'UP,MP,BR,WB'],
+['cowpea','🫘','Cowpea (Lobia)','लोबिया','ચોળા','pul','KZ',20,35,6,7.5,600,1000,90,'ls','3,4,6,7',400,10000,60,'RJ,KA,MH,GJ,UP'],
+['rajma','🫘','Kidney bean (Rajma)','राजमा','રાજમા','pul','R',15,25,5.5,6.5,300,500,110,'lh','10,11',450,14000,110,'JK,UK,HP,MH,KA'],
+['guar','🫘','Cluster bean (Guar)','ग्वार','ગુવાર','pul','KZ',25,35,7,8.5,400,600,100,'sl','3,6,7',450,11000,55,'RJ,HR,GJ'],
+['groundnut','🥜','Groundnut','मूंगफली','મગફળી','oil','K',25,30,6,6.5,500,1000,115,'sr','6,7',800,28000,65,'GJ,RJ,TN,AP,KA,MH'],
+['mustard','🌼','Mustard','सरसों','રાઈ (સરસવ)','oil','R',10,25,6,7.5,250,400,125,'ls','10,11',600,14000,62,'RJ,MP,UP,HR,WB,GJ'],
+['soybean','🌱','Soybean','सोयाबीन','સોયાબીન','oil','K',20,30,6,7.5,600,1000,100,'bc','6,7',500,16000,52,'MP,MH,RJ,KA,TG'],
+['sunflower','🌻','Sunflower','सूरजमुखी','સૂર્યમુખી','oil','KR',20,28,6.5,8,500,750,100,'ls','1,2,6,7,10',500,18000,65,'KA,AP,TG,MH,TN'],
+['sesame','🌿','Sesame (Til)','तिल','તલ','oil','KZ',25,35,5.5,8,500,800,90,'ls','3,6,7',250,10000,95,'GJ,RJ,WB,MP,UP'],
+['castor','🌿','Castor','अरंडी','એરંડા','oil','K',20,30,5,6.5,500,750,165,'sr','7,8',600,15000,55,'GJ,RJ,AP,TG'],
+['linseed','🌿','Linseed (Flax)','अलसी','અળસી','oil','R',15,25,6,7.5,450,750,120,'l','10,11',250,9000,65,'MP,UP,CG,MH'],
+['tomato','🍅','Tomato','टमाटर','ટામેટા','veg','KR',20,30,6,6.8,600,1200,120,'ls','6,7,8,10,11,12',9000,85000,15,'AP,MP,KA,GJ,WB'],
+['potato','🥔','Potato','आलू','બટાકા','veg','R',15,25,5.2,6.5,500,750,100,'ls','10,11',8000,65000,14,'UP,WB,BR,GJ,PB,MP'],
+['onion','🧅','Onion','प्याज','ડુંગળી','veg','KR',13,30,6,7.5,650,750,135,'l','6,7,10,11,12',8000,60000,15,'MH,MP,KA,GJ,BR,RJ'],
+['brinjal','🍆','Brinjal (Eggplant)','बैंगन','રીંગણ','veg','KRZ',22,30,5.5,6.5,600,1200,150,'ls','6,7,8,10,11,12',8000,60000,15,'WB,OD,BR,GJ,AP'],
+['cauliflower','🥦','Cauliflower','फूलगोभी','ફ્લાવર','veg','R',15,25,6,7,500,800,105,'l','8,9,10',6000,45000,15,'WB,BR,UP,OD,HR'],
+['cabbage','🥬','Cabbage','पत्तागोभी','કોબીજ','veg','R',15,25,6,7,500,800,105,'l','8,9,10,11',9000,50000,10,'WB,OD,BR,UP,GJ'],
+['okra','🌿','Okra (Bhindi)','भिंडी','ભીંડા','veg','KZ',22,35,6,6.8,600,1000,110,'ls','2,3,6,7',3600,50000,25,'WB,BR,GJ,AP,OD'],
+['chilli','🌶️','Chilli','मिर्च','મરચાં','veg','KR',20,32,6,6.8,600,1200,160,'bl','6,7,8,10,11',3500,70000,28,'AP,TG,KA,MP,MH'],
+['cucumber','🥒','Cucumber','खीरा','કાકડી','veg','KZ',20,30,6,7,500,1000,75,'ls','2,3,6,7',5500,50000,14,'UP,MP,KA,WB,GJ'],
+['spinach','🥬','Spinach','पालक','પાલક','veg','R',15,24,6.5,7,400,600,45,'l','9,10,11,12,1,2',3000,25000,12,'UP,PB,HR,GJ,MP'],
+['coriander','🌿','Coriander','धनिया','ધાણા','veg','R',18,27,6.2,6.8,400,500,45,'l','10,11',3000,25000,15,'RJ,MP,GJ,KA,UP'],
+['lettuce','🥗','Lettuce','सलाद पत्ता','લેટીસ','veg','R',15,22,6,7,400,600,55,'l','9,10,11,12',4000,35000,20,'KA,MH,PB,UP,GJ'],
+['carrot','🥕','Carrot','गाजर','ગાજર','veg','R',15,25,6,7,500,800,100,'sl','9,10,11',5000,40000,18,'UP,HR,PB,KA,WB'],
+['radish','🌱','Radish','मूली','મૂળા','veg','R',10,25,6,7,400,600,50,'sl','9,10,11,12,1',4500,20000,10,'UP,WB,PB,HR,BR'],
+['peas','🫛','Green peas (Matar)','मटर','વટાણા','veg','R',10,20,6,7.5,400,800,95,'l','10,11',2000,30000,35,'UP,MP,HP,PB,BR'],
+['bottlegourd','🥒','Bottle gourd (Lauki)','लौकी','દૂધી','veg','KZ',24,35,6,7,600,1000,120,'ls','2,3,6,7',8000,40000,10,'UP,BR,GJ,WB,OD'],
+['bittergourd','🥒','Bitter gourd (Karela)','करेला','કારેલા','veg','KZ',24,35,6,7,600,1000,110,'ls','2,3,6,7',3500,45000,25,'KA,UP,GJ,TN,WB'],
+['pumpkin','🎃','Pumpkin','कद्दू','કોળું','veg','KZ',24,30,6,7.5,500,1000,110,'ls','2,3,6,7',8000,35000,10,'UP,OD,WB,GJ,BR'],
+['garlic','🧄','Garlic','लहसुन','લસણ','veg','R',12,25,6,7.5,500,750,140,'l','10,11',2500,75000,50,'MP,GJ,RJ,UP'],
+['capsicum','🫑','Capsicum','शिमला मिर्च','કેપ્સિકમ (સિમલા મરચાં)','veg','R',18,28,6,6.5,600,1000,120,'l','8,9,10,11',6000,100000,30,'KA,HP,MH,UK,AP'],
+['mango','🥭','Mango','आम','કેરી','fru','Y',24,30,5.5,7.5,750,2500,365,'al','7,8',3500,40000,40,'UP,AP,KA,BR,GJ,MH'],
+['banana','🍌','Banana','केला','કેળા','fru','Y',20,35,6.5,7.5,1000,2000,330,'al','2,3,6,7',16000,120000,14,'TN,MH,GJ,AP,KA'],
+['guava','🍐','Guava','अमरूद','જામફળ','fru','Y',15,30,4.5,8.2,800,1500,365,'l','7,8',5000,50000,25,'UP,MP,BR,WB,GJ'],
+['pomegranate','🍎','Pomegranate','अनार','દાડમ','fru','Y',25,35,5.5,7.5,500,800,365,'sl','2,3,7,8',3500,120000,70,'MH,KA,GJ,RJ,AP'],
+['papaya','🍈','Papaya','पपीता','પપૈયા','fru','Y',22,30,6,7,1000,1500,300,'ls','2,3,6,7,9,10',16000,120000,12,'AP,GJ,KA,WB,MH'],
+['lemon','🍋','Lemon','नींबू','લીંબુ','fru','Y',15,30,5.5,7.5,750,1200,365,'ls','7,8',4000,60000,40,'AP,GJ,KA,MH'],
+['orange','🍊','Orange','संतरा','સંતરા','fru','Y',15,30,5.5,7.5,750,1200,365,'ls','7,8',3000,70000,35,'MH,MP,PB,RJ,AP'],
+['grapes','🍇','Grapes','अंगूर','દ્રાક્ષ','fru','Y',15,40,6.5,7.5,500,900,365,'ls','1,2',8000,300000,50,'MH,KA,TN,AP'],
+['apple','🍏','Apple','सेब','સફરજન','fru','Y',15,24,5.5,6.5,1000,1250,365,'lh','12,1,2',3000,150000,80,'JK,HP,UK'],
+['watermelon','🍉','Watermelon','तरबूज','તડબૂચ','fru','Z',24,35,6,7,400,600,90,'s','2,3',10000,40000,8,'UP,WB,KA,OD,AP'],
+['muskmelon','🍈','Muskmelon','खरबूजा','શક્કરટેટી','fru','Z',24,35,6,7,400,600,90,'s','2,3',5000,40000,15,'UP,PB,AP,RJ,HR'],
+['sapota','🥔','Sapota (Chikoo)','चीकू','ચીકુ','fru','Y',20,35,6,8,1250,2000,365,'ls','7,8',3500,50000,25,'GJ,KA,MH,TN,AP'],
+['turmeric','🟡','Turmeric','हल्दी','હળદર','spi','K',20,30,5,7.5,1000,2000,270,'ls','5,6',8000,110000,20,'TG,MH,TN,AP,OD,KA'],
+['ginger','🫚','Ginger','अदरक','આદુ','spi','K',19,28,5.5,6.5,1500,3000,240,'ls','4,5',6000,150000,40,'KA,KL,AS,OD'],
+['cumin','🌿','Cumin (Jeera)','जीरा','જીરું','spi','R',20,30,6.8,8.3,150,300,110,'sl','11',300,22000,250,'GJ,RJ'],
+['fenugreek','🌿','Fenugreek (Methi)','मेथी','મેથી','spi','R',10,25,6,7,300,500,100,'l','10,11',400,12000,60,'RJ,GJ,MP,UP'],
+['pepper','⚫','Black pepper','काली मिर्च','કાળા મરી','spi','Y',20,30,5.5,7,2000,3000,365,'lr','6,7',400,100000,600,'KL,KA,TN'],
+['fennel','🌿','Fennel (Saunf)','सौंफ','વરિયાળી','spi','R',15,25,6.5,8,300,500,165,'ls','10,11',500,22000,100,'GJ,RJ,UP'],
+['sugarcane','🎋','Sugarcane','गन्ना','શેરડી','cash','Y',20,35,6.5,7.5,1100,1500,330,'ab','2,3,10,11',32000,80000,3.6,'UP,MH,KA,TN,GJ'],
+['cotton','☁️','Cotton','कपास','કપાસ','cash','K',21,30,5.8,8,600,1000,165,'b','5,6',700,28000,75,'GJ,MH,TG,RJ,HR,KA'],
+['jute','🌿','Jute','जूट','શણ (જૂટ)','cash','K',24,37,6,7.5,1500,2000,135,'a','3,4,5',1000,22000,55,'WB,BR,AS'],
+['coconut','🥥','Coconut','नारियल','નાળિયેર','pla','Y',20,32,5.2,8,1000,2500,365,'se','6,7',5500,40000,14,'KL,KA,TN,AP'],
+['tea','🍵','Tea','चाय','ચા','pla','Y',13,30,4.5,5.5,1500,3000,365,'eh','7,8',3500,60000,20,'AS,WB,TN,KL'],
+['coffee','☕','Coffee','कॉफी','કોફી','pla','Y',15,28,6,6.5,1500,2500,365,'rh','6,7',350,70000,300,'KA,KL,TN'],
+['rubber','🌳','Rubber','रबड़','રબર','pla','Y',25,34,4.5,6.5,2000,3000,365,'e','6,7',600,50000,180,'KL,TN']
+];
+const CR={};RAW.forEach(r=>{const[id,e,en,hi,gu,cat,se,tmin,tmax,pa,pb,ra,rb,days,soil,sow,y,cost,price,st]=r;CR[id]={id,e,n:[en,hi,gu],cat,se,tmin,tmax,pa,pb,ra,rb,days,soil,sow:sow.split(',').map(Number),y,cost,price,st:st.split(','),u:id=='coconut'?'nut':'kg'}});
+const CATS=['cer','pul','oil','veg','fru','spi','cash','pla'],CATI={cer:'🌾',pul:'🫘',oil:'🌻',veg:'🥕',fru:'🍎',spi:'🌶️',cash:'🎋',pla:'🌴'};
+const inr=v=>'₹'+Math.round(v).toLocaleString('en-IN');
+const MN=m=>new Date(2000,m-1,1).toLocaleString(['en-IN','hi-IN','gu-IN'][L],{month:'short'});
+
+/* ====== DISEASES ====== */
+const DT={
+eb:{0:["Early blight 🍂","Brown round spots with rings on old leaves","Spray every 10 days. Pick off spotted leaves."],1:["अगेती झुलसा 🍂","पुराने पत्तों पर छल्लेदार भूरे गोल धब्बे","हर 10 दिन में छिड़कें। धब्बेदार पत्ते तोड़ दें।"],2:["વહેલો સુકારો 🍂","જૂના પાંદડા પર કડાવાળા ભૂરા ગોળ ડાઘ","દર 10 દિવસે છંટકાવ કરો. ડાઘવાળા પાંદડા તોડી નાખો."]},
+lb:{0:["Late blight 🌧️","Dark wet patches on leaves & fruit in cool, damp weather","Spray before rain. Do not wet the leaves."],1:["पछेती झुलसा 🌧️","ठंडे, नम मौसम में पत्तों और फल पर गहरे गीले धब्बे","बारिश से पहले छिड़कें। पत्ते गीले न करें।"],2:["મોડો સુકારો 🌧️","ઠંડા, ભેજવાળા હવામાનમાં પાંદડા અને ફળ પર ઘેરા ભીના ડાઘ","વરસાદ પહેલા છંટકાવ કરો. પાંદડા ભીના ન કરો."]},
+lc:{0:["Leaf curl virus 🪰","Leaves curl up and turn yellow; plant stays small","Pull out sick plants. Use yellow sticky traps."],1:["पत्ता मरोड़ वायरस 🪰","पत्ते मुड़कर पीले हो जाते हैं; पौधा छोटा रहता है","बीमार पौधे उखाड़ दें। पीले चिपचिपे ट्रैप लगाएँ।"],2:["પાન કોકડવા વાયરસ 🪰","પાંદડા વળીને પીળા થાય છે; છોડ નાનો રહે છે","બીમાર છોડ ઉખેડી નાખો. પીળા ચીકણા પિંજર લગાવો."]},
+an:{0:["Anthracnose 🌶️","Sunken dark spots on fruit and stems","Do not keep fruit on wet soil."],1:["एंथ्रेक्नोज 🌶️","फल और तने पर धँसे हुए काले धब्बे","फल को गीली मिट्टी पर न रखें।"],2:["એન્થ્રેકનોઝ 🌶️","ફળ અને થડ પર ઊંડા કાળા ડાઘ","ફળને ભીની જમીન પર ન રાખો."]},
+th:{0:["Thrips / leaf curl 🐛","Leaves curl upward, tiny insects inside","Spray in evening. Blue sticky traps help."],1:["थ्रिप्स / पत्ता मुड़ना 🐛","पत्ते ऊपर की ओर मुड़ते हैं, अंदर छोटे कीड़े","शाम को छिड़कें। नीले चिपचिपे ट्रैप मदद करते हैं।"],2:["થ્રિપ્સ / પાન કોકડવા 🐛","પાંદડા ઉપર તરફ વળે છે, અંદર નાની જીવાત","સાંજે છંટકાવ કરો. વાદળી ચીકણા પિંજર મદદ કરે છે."]},
+pm:{0:["Powdery mildew ⚪","White powder on leaves","Do not spray sulphur in very hot sun."],1:["चूर्णिल आसिता (पाउडरी मिल्ड्यू) ⚪","पत्तों पर सफेद चूर्ण","बहुत तेज़ धूप में सल्फर न छिड़कें।"],2:["ભૂકી છારો ⚪","પાંદડા પર સફેદ ભૂકી","બહુ તડકામાં સલ્ફરનો છંટકાવ ન કરો."]},
+ls:{0:["Leaf spot 🟤","Small brown spots with yellow edge","Water at the root, not on leaves."],1:["पत्ती धब्बा 🟤","पीले किनारे वाले छोटे भूरे धब्बे","जड़ में पानी दें, पत्तों पर नहीं।"],2:["પાન ટપકાં 🟤","પીળી કિનારીવાળા નાના ભૂરા ડાઘ","મૂળમાં પાણી આપો, પાંદડા પર નહીં."]},
+dm:{0:["Downy mildew 🌫️","Yellow patches on top, grey fuzz below leaf","Give more space between plants."],1:["मृदुरोमिल आसिता (डाउनी मिल्ड्यू) 🌫️","ऊपर पीले धब्बे, पत्ते के नीचे भूरी रूई जैसी परत","पौधों के बीच ज़्यादा जगह रखें।"],2:["તળછારો 🌫️","ઉપર પીળા ધબ્બા, પાંદડા નીચે રાખોડી રુવાંટી","છોડ વચ્ચે વધારે જગ્યા રાખો."]},
+ap:{0:["Aphids / insects 🐜","Sticky leaves, tiny insects in groups","Spray in the evening. Repeat after 7 days."],1:["माहू / कीड़े 🐜","चिपचिपे पत्ते, झुंड में छोटे कीड़े","शाम को छिड़कें। 7 दिन बाद दोहराएँ।"],2:["મોલો / જીવાત 🐜","ચીકણા પાંદડા, ટોળામાં નાની જીવાત","સાંજે છંટકાવ કરો. 7 દિવસ પછી ફરી કરો."]},
+wl:{0:["Wilt 🥀","Plant droops even when soil is wet","Do not plant in the same field again and again."],1:["उकठा (विल्ट) 🥀","मिट्टी गीली होने पर भी पौधा मुरझाता है","एक ही खेत में बार-बार वही फसल न लगाएँ।"],2:["સુકારો (વિલ્ટ) 🥀","જમીન ભીની હોવા છતાં છોડ નમી પડે છે","એક જ ખેતરમાં વારંવાર એ જ પાક ન વાવો."]},
+ff:{0:["Fruit fly 🪰","Small holes in fruit, maggots inside","Collect and bury fallen fruit."],1:["फल मक्खी 🪰","फल में छोटे छेद, अंदर इल्लियाँ","गिरे फल इकट्ठा करके गाड़ दें।"],2:["ફળમાખી 🪰","ફળમાં નાના છિદ્રો, અંદર ઇયળ","પડેલા ફળ એકઠા કરી દાટી દો."]},
+fu:{0:["Fungus (spots) 🍄","Spots or mould on leaves","Ask your local KVK / agriculture officer to confirm."],1:["फफूंद (धब्बे) 🍄","पत्तों पर धब्बे या फफूंद","स्थानीय KVK / कृषि अधिकारी से पुष्टि कराएँ।"],2:["ફૂગ (ડાઘ) 🍄","પાંદડા પર ડાઘ અથવા ફૂગ","સ્થાનિક KVK / કૃષિ અધિકારી પાસે ખાતરી કરાવો."]}};
+/* [medicine, dose, qty per acre, unit, ₹ per spray per acre, sprays] */
+const DM={eb:['Mancozeb 75% WP','2.5 g/L',500,'g',350,3],lb:['Metalaxyl + Mancozeb','2.5 g/L',500,'g',600,3],lc:['Imidacloprid 17.8% SL','0.3 ml/L',60,'ml',250,2],an:['Carbendazim 50% WP','1 g/L',200,'g',200,2],th:['Fipronil 5% SC','1.5 ml/L',300,'ml',500,2],pm:['Wettable Sulphur 80%','3 g/L',600,'g',250,2],ls:['Copper oxychloride 50% WP','3 g/L',600,'g',300,2],dm:['Metalaxyl-M + Mancozeb','2.5 g/L',500,'g',600,2],ap:['Neem oil (organic)','3 ml/L',600,'ml',350,3],wl:['Trichoderma (organic)','2 kg/acre',2,'kg',300,1],ff:['Pheromone traps','1 trap / 600 m²',8,'traps',800,1],fu:['Copper oxychloride','3 g/L',600,'g',300,2]};
+const DC={tomato:['eb','lb','lc'],chilli:['an','th','pm'],spinach:['ls','dm','ap'],coriander:['pm','ls','wl'],lettuce:['dm','ls','ap'],cucumber:['dm','pm','ff'],potato:['eb','lb','ap']};
+const DCAT={cer:['ls','ap','fu'],pul:['pm','ap','wl'],oil:['ap','ls','dm'],veg:['eb','pm','ap'],fru:['an','pm','ff'],spi:['ls','wl','ap'],cash:['ap','ls','fu'],pla:['fu','ls','ap']};
+const UN={kg:['kg','किलो','કિલો'],litre:['litre','लीटर','લિટર'],traps:['traps','ट्रैप','ટ્રેપ']};
+const un=u=>UN[u]?UN[u][L]:u,dz=id=>DC[id]||DCAT[CR[id].cat];
+const TIPS=[["Water early morning or evening. Less water is lost.","सुबह जल्दी या शाम को पानी दें। पानी कम बर्बाद होता है।","વહેલી સવારે કે સાંજે પાણી આપો. પાણી ઓછું વેડફાય છે."],["Cover soil with dry leaves to keep water inside.","पानी रोकने के लिए मिट्टी को सूखे पत्तों से ढकें।","પાણી જાળવવા જમીનને સૂકા પાંદડાથી ઢાંકો."],["Look under leaves every day for insects.","रोज़ पत्तों के नीचे कीड़े देखें।","રોજ પાંદડા નીચે જીવાત જુઓ."],["Add compost if soil is too acidic.","मिट्टी बहुत अम्लीय हो तो कम्पोस्ट डालें।","જમીન બહુ એસિડિક હોય તો કમ્પોસ્ટ નાખો."],["Keep the water tank clean and covered.","पानी की टंकी साफ और ढकी रखें।","પાણીની ટાંકી સાફ અને ઢાંકેલી રાખો."]];
+
+/* ====== SCHEMES ====== */
+const SCH=[
+['💵','PM-KISAN','https://pmkisan.gov.in',["₹6,000 per year in three instalments of ₹2,000 for eligible farmer families.","पात्र किसान परिवारों को साल में ₹6,000, तीन किस्तों (₹2,000 प्रत्येक) में।","પાત્ર ખેડૂત પરિવારોને વર્ષે ₹6,000, ત્રણ હપ્તા (₹2,000 દરેક) માં."]],
+['🛡️','PM Fasal Bima Yojana','https://pmfby.gov.in',["Crop insurance against drought, flood, pests and disease. Farmer pays only 2% (kharif), 1.5% (rabi) and 5% (cash/horticulture crops) of the sum insured.","सूखा, बाढ़, कीट और रोग से फसल बीमा। किसान बीमित राशि का सिर्फ 2% (खरीफ), 1.5% (रबी) और 5% (नकदी/बागवानी) देता है।","દુષ્કાળ, પૂર, જીવાત અને રોગ સામે પાક વીમો. ખેડૂત વીમા રકમના માત્ર 2% (ખરીફ), 1.5% (રવી) અને 5% (રોકડિયા/બાગાયત) ભરે છે."]],
+['💳','Kisan Credit Card (KCC)','https://www.myscheme.gov.in',["Low-interest farm loans from banks, up to ₹3 lakh at about 7% (less if repaid on time). Ask your bank for current rates.","बैंक से कम ब्याज पर खेती का कर्ज़, ₹3 लाख तक लगभग 7% पर (समय पर चुकाने पर कम)। ताज़ा दर बैंक से पूछें।","બેંક પાસેથી ઓછા વ્યાજે ખેતી લોન, ₹3 લાખ સુધી આશરે 7% (સમયસર ભરપાઈ પર ઓછું). તાજા દર બેંકને પૂછો."]],
+['🧪','Soil Health Card','https://soilhealth.dac.gov.in',["Free soil test and advice on the right fertilizer for your field.","मुफ़्त मिट्टी जाँच और आपके खेत के लिए सही खाद की सलाह।","મફત જમીન તપાસ અને તમારા ખેતર માટે યોગ્ય ખાતરની સલાહ."]],
+['🏪','eNAM','https://enam.gov.in',["Online mandi: sell your produce and compare prices across markets.","ऑनलाइन मंडी: अपनी उपज बेचें और अलग-अलग मंडियों के भाव देखें।","ઓનલાઇન મંડી: તમારી ઉપજ વેચો અને જુદા જુદા બજારોના ભાવ સરખાવો."]],
+['☀️','PM-KUSUM','https://pmkusum.mnre.gov.in',["Subsidy on solar water pumps for farmers.","किसानों को सोलर पानी पंप पर सब्सिडी।","ખેડૂતોને સોલર પાણી પંપ પર સબસિડી."]]
+];
+
+/* ====== MAIL (FormSubmit) ====== */
+const shareOn=()=>ST.g('share')!=='0';
+const W3F_KEY='';
+/* ====== PUT YOUR WEB3FORMS ACCESS KEY HERE (free, from web3forms.com – enter parsaniyashaili@gmail.com, key arrives by email) ====== */
+/* Backend (server.js). Empty = same website address (when the backend serves this page). Or put e.g. 'https://agrimind.onrender.com' */
+const BACKEND_URL='';
+async function sendMail(type,data,force){
+ if(!force&&!shareOn())return false;
+ try{const r=await fetch(BACKEND_URL+'/api/notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type,language:LNAME[L],data})});const j=await r.json();if(j&&j.ok)return true}catch(e){}
+ const extra={type,language:LNAME[L],time:new Date().toLocaleString('en-IN'),...data};
+ try{
+  if(W3F_KEY){const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({access_key:W3F_KEY,subject:'AgriMind • '+type,from_name:data.name||'AgriMind visitor',...extra})});const j=await r.json();return !!j.success}
+  const r=await fetch('https://formsubmit.co/ajax/'+MAIL,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({_subject:'AgriMind • '+type,_template:'table',_captcha:'false',...extra})});
+  const j=await r.json();return r.ok&&String(j.success)=='true'}catch(e){return false}}
+
+/* ====== STATE & HELPERS ====== */
+const store={get:()=>{try{return JSON.parse(localStorage.getItem('agri')||'[]')}catch(e){return[]}},set:v=>{try{localStorage.setItem('agri',JSON.stringify(v))}catch(e){}}};
+let rows=store.get(),pumpOn=false,online=false,lastData=null,WX=null,CAT='all',rating=0;
+
+function cropOpts(sel,blank,dflt){const v=sel.value;sel.innerHTML=(blank?'<option value="">—</option>':'')+CATS.map(k=>`<optgroup label="${CATI[k]} ${t('c_'+k)}">`+Object.values(CR).filter(c=>c.cat==k).map(c=>`<option value="${c.id}">${c.e} ${c.n[L]}</option>`).join('')+'</optgroup>').join('');sel.value=(v!==''&&CR[v])?v:(blank?'':dflt)}
+
+function applyStatic(){document.documentElement.lang=['en','hi','gu'][L];
+ $$('[data-i]').forEach(e=>e.innerHTML=t(e.dataset.i));$$('[data-p]').forEach(e=>e.placeholder=t(e.dataset.p));
+ $('#lgb').textContent='🌐 '+['EN','हि','ગુ'][L];$('#gks').textContent=t('save');$('#kbox').hidden=true}
+
+function renderAll(){applyStatic();
+ cropOpts($('select[name=crop]'),0,'tomato');cropOpts($('#dcrop'),0,'tomato');cropOpts($('#bn'),0,'tomato');cropOpts($('#ecrop'),1);
+ $('#tip').textContent=TIPS[new Date().getDate()%TIPS.length][L];
+ guide();sow();schemes();about();bud();rd();hist();pumpTxt();modeTxt();tools();wxShow();
+ if(lastData)show(lastData);else{$('#dec').textContent=t('tap_enter');$('#ab').innerHTML=`<div class="mu">${t('a_empty')}</div>`}}
+
+function setLang(i){L=i;hasLang=true;ST.s('lang',i);$('#lg').classList.add('hide');renderAll();draw(cp)}
+
+/* ====== NAV ====== */
+function go(v){$$('.view').forEach(e=>e.classList.toggle('on',e.id==v));$$('#tabs button').forEach(b=>{const on=b.dataset.v==v;b.classList.toggle('on',on);if(on){const tb=$('#tabs');tb.scrollTo({left:b.offsetLeft-tb.clientWidth/2+b.clientWidth/2,behavior:'smooth'})}});
+ if(v=='hist')hist();if(v=='bud')bud();$('#tabs').scrollIntoView({block:'start',behavior:'smooth'})}
+$$('#tabs button').forEach(b=>b.onclick=()=>go(b.dataset.v));
+$$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+$$('[data-sm]').forEach(b=>b.onclick=()=>$('#sm').value=b.dataset.sm);
+$$('#lg [data-l]').forEach(b=>b.onclick=()=>setLang(+b.dataset.l));
+$('#lgb').onclick=()=>$('#lg').classList.remove('hide');
+$('#startb').onclick=()=>$('#app').scrollIntoView({behavior:'smooth'});
+$('#lgn').innerHTML=[0,1,2].map(i=>`<small>${T.lang_note[i]}</small>`).join('');
+if(hasLang)$('#lg').classList.add('hide');
+
+/* ====== ADVICE ====== */
+function calc(d){const c=CR[d.crop]||CR.tomato,dry=d.soil_moisture<35||(d.soil_moisture<45&&d.temperature>33),hot=d.temperature>35,cold=d.temperature<15;
+ return{c,w:dry&&d.water_level>5,ir:d.water_level<=5?'empty':dry?'dry':'ok',ts:hot?'hot':cold?'cold':'good',ph:d.ph<5.8?'acid':d.ph>7?'alk':'good',ok:d.temperature>=c.tmin&&d.temperature<=c.tmax}}
+function advHtml(d){const a=calc(d),c=a.c;
+ return `<div class="row"><div class="e">💧</div><div><b>${t(a.w?'w_now':'w_no')}</b><br><span class="mu">${t('ir_'+a.ir,d.soil_moisture)}</span></div><span style="font-size:32px">${a.w?'🚨':'✅'}</span></div>
+<div class="row"><div class="e">🌡️</div><div><b>${t('heat_lbl',t(a.ts=='good'?'good':a.ts))}</b><br><span class="mu">${t('tt_'+a.ts)}</span></div></div>
+<div class="row"><div class="e">🧪</div><div><b>${t('soil_lbl',t(a.ph))}</b><br><span class="mu">${t('pt_'+a.ph)}</span></div></div>
+<div class="row"><div class="e">${c.e}</div><div><b>${t(a.ok?'likes':'struggle',c.n[L])} ${a.ok?'👍':'⚠️'}</b><br><span class="mu">${t('tp_'+c.cat)}</span></div></div>`}
+function show(d){lastData=d;const a=calc(d);$('#mT').textContent=d.temperature+'°C';$('#mM').textContent=d.soil_moisture+'%';$('#mH').textContent=d.humidity+'%';$('#mP').textContent=d.ph;$('#mB').style.width=Math.min(100,d.soil_moisture)+'%';
+ const h=advHtml(d);$('#dec').innerHTML=h;$('#ab').innerHTML=h+`<div class="msg ${a.w?'w':''}"><b>👉 ${t(a.w?'do_water':'all_good')}</b></div>`}
+async function api(p,o){const c=new AbortController(),tm=setTimeout(()=>c.abort(),1500);try{const r=await fetch(API+p,{...o,signal:c.signal});if(!r.ok)throw 0;online=true;return await r.json()}catch(e){online=false;return null}finally{clearTimeout(tm)}}
+$('#f').onsubmit=e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.target));['temperature','humidity','soil_moisture','ph','light_hours','water_level','area'].forEach(k=>d[k]=Number(d[k]));
+ api('/api/readings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...d,area:d.area*4046.86})}).then(modeTxt);
+ const a=calc(d);rows.unshift({...d,created_at:new Date().toISOString(),irrigation:a.w});rows=rows.slice(0,100);store.set(rows);
+ sendMail('Farm data',{crop:CR[d.crop].n[0],temperature_C:d.temperature,humidity_pct:d.humidity,soil_moisture_pct:d.soil_moisture,soil_ph:d.ph,sun_hours:d.light_hours,tank_pct:d.water_level,area_acre:d.area,notes:d.notes||'-',advice_water:a.w?'WATER NOW':'no water needed'});
+ show(d);$('#fm').innerHTML=`<div class="msg">✅ ${t('saved')}</div>`;go('advice')};
+function modeTxt(){$('#mode').textContent=t(online?'mode_on':'mode_off')}
+function hist(){$('#hb').innerHTML=rows.length?'<table><tr><th>📅</th><th>🌾</th><th>💧</th><th>🌡️</th><th>🧪</th><th>🤖</th></tr>'+rows.map(x=>`<tr><td>${new Date(x.created_at).toLocaleDateString(SPK[L])}</td><td>${(CR[x.crop]||CR.tomato).e}</td><td>${x.soil_moisture}%</td><td>${x.temperature}°</td><td>${x.ph}</td><td>${x.irrigation?'💧':'✅'}</td></tr>`).join('')+'</table>':`<div class="mu">📝 ${t('h_none')}</div>`}
+function clr(){if(confirm(t('h_conf'))){rows=[];store.set(rows);hist()}}
+function pumpTxt(){$('#pumpt').textContent=pumpOn?t('pump_on')+' 💦':t('pump_off')+' ⛔'+(online?'':' '+t('practice'))}
+async function pump(on){pumpOn=!!on;await api('/api/irrigation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({on:pumpOn})});pumpTxt()}
+function speak(){if(!lastData||!('speechSynthesis' in window))return alert(t('a_empty'));const d=lastData,a=calc(d),u=new SpeechSynthesisUtterance([t(a.w?'w_now':'w_no'),t('ir_'+a.ir,d.soil_moisture),t('heat_lbl',t(a.ts)),t('tt_'+a.ts),t('pt_'+a.ph)].join('. '));u.lang=SPK[L];speechSynthesis.cancel();speechSynthesis.speak(u)}
+
+/* ====== WEATHER ====== */
+function wxShow(){const o=$('#wx');if(!WX){if(!o.dataset.busy)o.textContent=t('wx_idle');return}
+ o.dataset.busy='';o.innerHTML=`<b style="font-size:22px">🌡️ ${WX.t}°C • 💦 ${WX.h}%</b><br>${t('wx_rain')}: ${WX.r.map(x=>'🌧️ '+x+'%').join(' • ')}`;$('#wxf').hidden=false}
+function wxGo(){const o=$('#wx');o.dataset.busy='1';o.textContent=t('wx_wait');
+ if(!navigator.geolocation){o.dataset.busy='';o.textContent=t('wx_err');return}
+ navigator.geolocation.getCurrentPosition(async p=>{try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.coords.latitude}&longitude=${p.coords.longitude}&current=temperature_2m,relative_humidity_2m&daily=precipitation_probability_max&forecast_days=3&timezone=auto`);const j=await r.json();WX={t:j.current.temperature_2m,h:j.current.relative_humidity_2m,r:j.daily.precipitation_probability_max};wxShow()}catch(e){o.dataset.busy='';o.textContent=t('wx_err')}},()=>{o.dataset.busy='';o.textContent=t('wx_err')},{timeout:12000})}
+function wxFill(){if(!WX)return;const f=$('#f');f.temperature.value=WX.t;f.humidity.value=WX.h;go('entry')}
+
+/* ====== SOW THIS MONTH ====== */
+function sow(){const m=new Date().getMonth()+1,l=Object.values(CR).filter(c=>c.sow.includes(m));
+ $('#sow').innerHTML=l.length?l.map(c=>`<button data-c="${c.id}">${c.e} ${c.n[L]}</button>`).join(''):`<div class="mu">${t('sow_none')}</div>`}
+$('#sow').onclick=e=>{const b=e.target.closest('button');if(!b)return;CAT='all';$('#cs').value=CR[b.dataset.c].n[L];go('crops');guide();const c=$('.cc');if(c)c.classList.add('open')};
+
+/* ====== CROP GUIDE ====== */
+function cardHtml(c,o){const un=t(c.u=='nut'?'nut':'kg'),
+ kv=[['d_season',[...c.se].map(x=>t('s'+x)).join(' + ')],['d_temp',`${c.tmin}–${c.tmax}°C`],['d_ph',`${c.pa}–${c.pb}`],['d_rain',`${c.ra}–${c.rb}`],['d_days',c.days>=365?t('yearly'):c.days],['d_soil',[...c.soil].map(x=>t('so_'+x)).join(', ')],['d_sow',c.sow.map(MN).join(', ')],['d_yield',`${c.y.toLocaleString('en-IN')} ${un}`],['d_ccost',inr(c.cost)],['d_price',`₹${c.price}/${un}`],['d_states',c.st.map(s=>SN[s][L]).join(', ')]];
+ return `<div class="card cc${o?' open':''}" data-id="${c.id}"><div class="hd"><div class="e">${c.e}</div><div class="big">${c.n[L]}</div><small>${CATI[c.cat]} ${t('c_'+c.cat)} • ${[...c.se].map(x=>t('s'+x).split(' (')[0]).join('/')}</small></div>
+<div class="det"><div class="kv">${kv.map(([k,v])=>`<span>${t(k)}</span><span><b>${v}</b></span>`).join('')}</div><p class="mu">💡 ${t('tp_'+c.cat)}</p>
+<div class="acts"><button class="pri" data-act="bud" data-id="${c.id}">💰 ${t('go_bud')}</button><button data-act="dis" data-id="${c.id}">🦠 ${t('go_dis')}</button></div></div></div>`}
+function guide(){const q=$('#cs').value.trim().toLowerCase(),open=new Set([...$$('.cc.open')].map(e=>e.dataset.id));
+ $('#cc').innerHTML=['all',...CATS].map(k=>`<button class="${CAT==k?'on':''}" data-cat="${k}">${k=='all'?t('c_all'):CATI[k]+' '+t('c_'+k)}</button>`).join('');
+ $('#cg').innerHTML=Object.values(CR).filter(c=>(CAT=='all'||c.cat==CAT)&&(!q||c.n.join(' ').toLowerCase().includes(q)||c.id.includes(q))).map(c=>cardHtml(c,open.has(c.id))).join('')||'<div class="mu">—</div>'}
+$('#cs').oninput=guide;
+$('#cc').onclick=e=>{const b=e.target.closest('button');if(b){CAT=b.dataset.cat;guide()}};
+$('#cg').onclick=e=>{const a=e.target.closest('[data-act]');
+ if(a){const id=a.dataset.id;if(a.dataset.act=='bud'){$('#bn').value=id;go('bud')}else{$('#dcrop').value=id;rd();go('scan')}return}
+ const h=e.target.closest('.hd');if(h)h.parentElement.classList.toggle('open')};
+
+/* ====== PLANT CHECK & DISEASE ====== */
+function disHtml(id){const a=+$('#dac').value||1;
+ return `<div class="msg w">⚠️ ${t('d_safe')}</div>`+dz(id).map(k=>{const m=DM[k],x=DT[k][L];let q=m[2]*a,u=m[3];if(u=='g'&&q>=1000){q/=1000;u='kg'}if(u=='ml'&&q>=1000){q/=1000;u='litre'}
+ return `<div class="card"><div class="big">🦠 ${x[0]}</div><p class="mu">👀 ${x[1]}</p><p>💊 <b>${m[0]}</b><br>🧴 ${m[1]}</p><p>📦 ${t('d_qty',a,(+q.toFixed(2))+' '+un(u),m[5])}<br>💰 <b>${t('dz_cost',inr(m[4]*m[5]*a))}</b></p><p>✅ ${x[2]}</p></div>`}).join('')}
+const rd=()=>{$('#dg').innerHTML=disHtml($('#dcrop').value||'tomato')};$('#dcrop').onchange=rd;$('#dac').oninput=rd;
+$('#leaf').onchange=e=>{const f=e.target.files[0];if(!f)return;const img=new Image();img.onload=()=>{const c=$('#cv'),x=c.getContext('2d');c.width=200;c.height=200*img.height/img.width;x.drawImage(img,0,0,c.width,c.height);c.hidden=false;
+ const p=x.getImageData(0,0,c.width,c.height).data;let g=0,y=0,b=0,n=0;for(let i=0;i<p.length;i+=4){const r=p[i],gg=p[i+1],bl=p[i+2];if(gg>200&&r>200&&bl>200||gg<40&&r<40)continue;n++;if(gg>r&&gg>bl)g++;else if(r>bl&&gg>bl*1.2&&r>=gg*.8)y++;else if(r>gg&&r>bl)b++}
+ const bad=n?Math.round((y+b)/n*100):0,ok=bad<20;
+ $('#sr').innerHTML=`<div class="msg ${ok?'':'w'}"><b>${ok?'✅ '+t('s_ok')+' 🌿':bad<45?'⚠️ '+t('s_some')+' 🍂':'🚨 '+t('s_many')+' 🦠'}</b><br>${t('s_bad')}: ${bad}%</div><p>${t(ok?'s_keep':'s_act')}</p>${ok?'':disHtml($('#dcrop').value||'tomato')}`};img.src=URL.createObjectURL(f)};
+
+/* ====== BUDGET ====== */
+function bud(){const c=CR[$('#bn').value]||CR.tomato,a=+$('#ba').value||0,sp=[8,12,20,12,32,10,6],I=['i_seed','i_land','i_fert','i_med','i_lab','i_wat','i_oth'],tot=c.cost,inc=c.y*c.price,un=t(c.u=='nut'?'nut':'kg'),per=c.days>=365;
+ $('#bo').innerHTML=`<div class="card"><div class="big">${c.e} ${c.n[L]} • ${t('b_n',a)} • ${per?t('yearly'):c.days+' '+t('b_days')}</div><table><tr><th>${t('b_item')}</th><th>${t('b_1')}</th><th>${t('b_n',a)}</th></tr>${sp.map((s,i)=>`<tr><td>${t(I[i])}</td><td>${inr(tot*s/100)}</td><td>${inr(tot*s/100*a)}</td></tr>`).join('')}<tr><th>💸 ${t('b_total')}</th><th>${inr(tot)}</th><th>${inr(tot*a)}</th></tr><tr><td>🌾 ${t('b_harv')} (${un})</td><td>${c.y.toLocaleString('en-IN')}</td><td>${Math.round(c.y*a).toLocaleString('en-IN')}</td></tr><tr><td>💵 ${t('b_inc',c.price,un)}</td><td>${inr(inc)}</td><td>${inr(inc*a)}</td></tr><tr><th>${inc>=tot?'✅ '+t('b_profit'):'⚠️ '+t('b_loss')}</th><th>${inr(inc-tot)}</th><th>${inr((inc-tot)*a)}</th></tr></table>
+ <div class="msg">🏦 ${t('b_keep',inr(tot*a*1.1))}</div>${per?`<div class="msg w">🌳 ${t('b_peren')}</div>`:''}<p class="mu">${t('b_note')}</p></div>`}
+$('#bn').onchange=bud;$('#ba').oninput=bud;
+
+/* ====== AI CHAT (direct Gemini) ====== */
+let H=[];
+const gkey=()=>GEMINI_KEY||ST.g('gk')||'';
+$('#gks').onclick=()=>{ST.s('gk',$('#gk').value.trim());alert(t('saved_ok'))};
+const sysP=()=>`You are AgriMind, a friendly farming helper for small Indian farmers with little education. Reply ONLY in ${LNAME[L]} unless the farmer clearly writes in another language, then use that language. Use very short simple sentences and a few emojis. Use acres and rupees (₹). When asked, give medicine name, dose per litre and approximate cost per acre. Add a safety line for chemicals. If unsure, tell them to ask the local KVK / agriculture officer or Kisan Call Centre 1800-180-1551.`+(rows[0]?' Farmer latest data: '+JSON.stringify(rows[0]):'');
+function msg(x,c){const d=document.createElement('div');d.className='b '+c;d.textContent=x;$('#cm').appendChild(d);$('#cm').scrollTop=1e9;return d}
+async function aiFree(){const r=await fetch('https://text.pollinations.ai/openai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'openai',messages:[{role:'system',content:sysP()},...H.slice(-12).map(x=>({role:x.role=='model'?'assistant':'user',content:x.parts[0].text}))]})});const j=await r.json();return j.choices[0].message.content}
+async function ask(q){q=(typeof q=='string'&&q)||$('#ci').value.trim();if(!q)return;$('#ci').value='';msg(q,'u');
+ sendMail('Question (Ask AI)',{question:q,latest_crop:rows[0]?CR[rows[0].crop].n[0]:'-'});
+ const w=msg(t('think'),'a'),k=gkey();
+ try{H.push({role:'user',parts:[{text:q}]});let a='';
+  if(k){const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':k},body:JSON.stringify({systemInstruction:{parts:[{text:sysP()}]},contents:H.slice(-12)})});
+   const j=await r.json();if(j.error)throw new Error(j.error.message);
+   a=((j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts)||[]).map(p=>p.text||'').join('').trim()}
+  else a=String(await aiFree()).trim();
+  if(!a)throw new Error('empty answer');
+  H.push({role:'model',parts:[{text:a}]});w.textContent=a;$('#cm').scrollTop=1e9}
+ catch(e){H.pop();w.textContent=t('ch_err',e.message)}}
+$('#ci').onkeydown=e=>{if(e.key=='Enter')ask()};
+$$('[data-q]').forEach(b=>b.onclick=()=>ask(t(b.dataset.q)));
+
+/* ====== SCHEMES / TOOLS / ABOUT ====== */
+function schemes(){$('#scl').innerHTML=SCH.map(s=>`<div class="card sch"><div class="e">${s[0]}</div><div><div class="big">${s[1]}</div><p style="margin:4px 0">${s[3][L]}</p><a href="${s[2]}" target="_blank" rel="noopener">🔗 ${t('sc_open')}</a></div></div>`).join('')}
+const AREA={acre:4046.856,ha:10000,guntha:101.1714,bigha:1618.74,sqm:1};
+function tools(){const u=$('#lu'),v=u.value||'acre';u.innerHTML=Object.keys(AREA).map(k=>`<option value="${k}">${t('u_'+k)}</option>`).join('');u.value=v;conv()}
+function conv(){const v=+$('#lv').value||0,u=$('#lu').value||'acre';$('#lo').innerHTML=Object.keys(AREA).filter(k=>k!=u).map(k=>`<div class="row"><div><b>${+(v*AREA[u]/AREA[k]).toFixed(3)}</b> ${t('u_'+k)}</div></div>`).join('')}
+$('#lv').oninput=conv;$('#lu').onchange=conv;
+function about(){const P=[['🗣️','pr1','pr1t'],['🌾','pr2','pr2t'],['🤖','pr3','pr3t'],['💰','pr4','pr4t'],['🔊','pr5','pr5t'],['🆓','pr6','pr6t']];
+ $('#pr').innerHTML=P.map(p=>`<div class="card"><div class="e">${p[0]}</div><b>${t(p[1])}</b><span>${t(p[2],Object.keys(CR).length)}</span></div>`).join('');$('#shr').checked=shareOn()}
+$('#shr').onchange=e=>ST.s('share',e.target.checked?'1':'0');
+
+/* ====== ENQUIRY & FEEDBACK ====== */
+$('#enf').onsubmit=async e=>{e.preventDefault();const f=e.target,d=Object.fromEntries(new FormData(f)),m=$('#enm'),btn=f.querySelector('button[type=submit]');
+ if(!d.name.trim()||!d.phone.trim()||!d.email.trim()||!d.message.trim()){m.innerHTML=`<div class="msg w">${t('en_need')}</div>`;return}
+ btn.disabled=true;m.innerHTML=`<div class="msg">⏳ ${t('sending')}</div>`;
+ const ok=await sendMail('Enquiry',{name:d.name,phone:d.phone,place:d.place||'-',email:d.email||'-',crop:d.crop?CR[d.crop].n[0]:'-',message:d.message},true);btn.disabled=false;
+ if(ok){m.innerHTML='';f.reset();f.hidden=true;$('#enok').hidden=false;$('#enok').scrollIntoView({behavior:'smooth',block:'center'})}
+ else{const txt=`AgriMind enquiry\nName: ${d.name}\nPhone: ${d.phone}\nPlace: ${d.place||'-'}\n${d.message}`;m.innerHTML=`<div class="msg e">${t('en_fail')}</div><div class="acts"><a style="text-decoration:none;flex:1 1 150px" target="_blank" rel="noopener" href="https://wa.me/919993477765?text=${encodeURIComponent(txt)}"><button type="button" class="pri" style="width:100%">💬 ${t('en_wa')}</button></a><a style="text-decoration:none;flex:1 1 150px" href="tel:+919993477765"><button type="button" style="width:100%">📞 9993477765</button></a></div>`}};
+$('#ennew').onclick=()=>{$('#enok').hidden=true;$('#enf').hidden=false;$('#enm').innerHTML='';$('#enf').scrollIntoView({behavior:'smooth',block:'start'})};
+$('#stars').innerHTML=[1,2,3,4,5].map(n=>`<button type="button" data-n="${n}">⭐</button>`).join('');
+$('#stars').onclick=e=>{const b=e.target.closest('button');if(!b)return;rating=+b.dataset.n;$$('#stars button').forEach(x=>x.classList.toggle('on',+x.dataset.n<=rating))};
+$('#rs').onclick=async()=>{if(!rating){$('#rm').innerHTML=`<div class="msg w">${t('rate_pick')}</div>`;return}
+ const ok=await sendMail('Feedback',{rating:rating+'/5',comment:$('#rc').value||'-'},true);$('#rm').innerHTML=ok?`<div class="msg">${t('rate_thanks')}</div>`:`<div class="msg e">${t('en_fail')}</div>`;if(ok){$('#rc').value=''}};
+
+/* ====== HERO SCENE ====== */
+const NS='http://www.w3.org/2000/svg',E=(tg,a,p)=>{const e=document.createElementNS(NS,tg);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e};
+let sd=7;const R=()=>(sd=(sd*16807)%2147483647)/2147483647,cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+for(let i=0;i<70;i++)E('circle',{cx:R()*800,cy:R()*500,r:R()*1.4+.3,fill:'#fff',opacity:.8},$('#st'));
+for(let x=-1200;x<=2000;x+=100)E('line',{x1:400,y1:300,x2:x,y2:500},$('#rw'));
+const tg=$('#tg'),P=[];
+function add(el,x,y,vx,vy,sp,w,k){tg.appendChild(el);P.push({g:el,x,y,vx,vy,sp,w,k})}
+for(let i=0;i<7;i++){const y0=-i*24,y1=y0-24,w0=46-i*3.6,w1=w0-3.6,g=E('g',{});E('polygon',{points:`${-w0/2},${y0} ${w0/2},${y0} ${w1/2},${y1} ${-w1/2},${y1}`,fill:'url(#bk)',stroke:'#2a170a','stroke-width':.6},g);E('path',{d:`M${-w0/4} ${y0}l2 -24M${w0/5} ${y0}l-2 -24`,stroke:'#2a170a',opacity:.5},g);add(g,0,y0-12,(R()-.5)*500,-150-R()*300,(R()-.5)*500,1,'t')}
+[[-70,-210,10],[75,-215,9],[-35,-185,7],[40,-180,7]].forEach(b=>{const g=E('g',{});E('path',{d:`M0 -150Q${b[0]/2} ${b[1]+40} ${b[0]} ${b[1]}`,stroke:'url(#bk)','stroke-width':b[2],fill:'none','stroke-linecap':'round'},g);add(g,0,0,b[0]*5,-300,(R()-.5)*300,1,'t')});
+for(let i=0;i<14;i++){const a=i*2.4,r=Math.sqrt(i/14),x=Math.cos(a)*r*115,y=-235+Math.sin(a)*r*70,g=E('g',{});E('circle',{r:38+R()*14,fill:'url(#cn)'},g);add(g,x,y,x*5+(R()-.5)*300,(y+200)*5-200,(R()-.5)*200,.6,'l')}
+for(let i=0;i<120;i++){const a=i*2.399,r=Math.sqrt(i/120),x=Math.cos(a)*r*150,y=-235+Math.sin(a)*r*100,g=E('g',{});E('ellipse',{rx:7,ry:3.5,fill:`hsl(${105+R()*40} ${50+R()*20}% ${26+R()*24}%)`,transform:`rotate(${R()*180})`},g);add(g,x,y,x*6+(R()-.5)*500,(y+200)*6-300-R()*300,(R()-.5)*1200,.9,'l')}
+for(let i=0;i<14;i++){const x=(R()-.5)*230,y=-235+(R()-.5)*150,g=E('g',{}),tx=E('text',{'font-size':17,'text-anchor':'middle'},g);tx.textContent=['🍎','🍋','🍊'][i%3];add(g,x,y,x*5+(R()-.5)*300,-300-R()*300,(R()-.5)*600,1,'l')}
+for(let i=0;i<60;i++){const g=E('g',{});const k=i<22?'d':i<42?'b':'s';if(k=='d')E('circle',{r:8+R()*10,fill:'#c9ad82',opacity:.6},g);else if(k=='b')E('polygon',{points:'0,0 9,2 6,10 -3,7',fill:'#5b3a21'},g);else E('circle',{r:2.2,fill:'#ffd34d'},g);const a=R()*6.283,v=250+R()*650;add(g,(R()-.5)*30,-150,Math.cos(a)*v,Math.sin(a)*v-200,R()*900,k=='s'?.3:.8,k)}
+const cap=$('#cap'),hint=$('#hint'),ttl=$('#ttl'),hero=$('#hero'),gl=$('#gl'),fg=$('#fg'),fl=$('#fl');
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+let tp=0,cp=0,run=false;
+function draw(p){
+ const gs=1+Math.pow(cl(p/.26),2.4)*55;gl.setAttribute('transform',`translate(400 250) scale(${gs}) translate(-440 -235)`);gl.style.opacity=p<.2?1:cl(1-(p-.2)/.08);
+ fg.style.opacity=cl((p-.13)/.1);const fs=1+1.2*(1-cl((p-.13)/.32));fg.setAttribute('transform',`translate(400 500) scale(${fs}) translate(-400 -500)`);
+ const gr=cl((p-.36)/.22),ex=cl((p-.64)/.24),e=1-Math.pow(1-ex,2),sh=ex>0&&ex<.25?Math.sin(p*900)*7*(1-ex*4):0;
+ tg.setAttribute('transform',`translate(${400+sh} ${440+sh}) scale(${.1+.9*gr})`);tg.style.opacity=gr>0?1:0;
+ P.forEach(o=>{const d=o.k=='d'||o.k=='b'||o.k=='s',cs=o.k=='l'?cl((gr-.35)/.4):1;let op=1-cl((ex-.6)/.4);
+  if(d){op=ex>0?(o.k=='d'?(1-ex)*.7:op):0}
+  const s=o.k=='d'?1+e*5:1;
+  if(o.k=='t'&&ex<=0){o.g.setAttribute('transform','translate(0 0)')}
+  else o.g.setAttribute('transform',ex>0?`translate(${o.x+o.vx*e} ${o.y+o.vy*e+700*e*e*o.w}) rotate(${o.sp*e}) scale(${s*cs})`:`translate(${o.x} ${o.y}) scale(${d?0:cs})`);
+  o.g.style.opacity=op});
+ fl.setAttribute('cy',440-150*gr);fl.setAttribute('r',ex>0&&ex<.3?30+ex*2200:0);fl.style.opacity=ex<.3?1-ex/.3:0;
+ cap.textContent=p<.02?'':p<.12?'🌍 '+t('cap1'):p<.24?'🇮🇳 '+t('cap2'):p<.38?'🌾 '+t('cap3'):p<.62?'🌳 '+t('cap4'):'';
+ hint.style.opacity=p<.04?1:0;const tt=cl((p-.86)/.1);ttl.style.opacity=tt;ttl.style.transform=`scale(${.8+.2*tt})`;ttl.style.pointerEvents=tt>.5?'auto':'none'}
+/* smooth (eased) scroll-linked animation */
+function loop(){cp+=(tp-cp)*(reduce?1:.1);if(Math.abs(tp-cp)<.0002)cp=tp;draw(cp);if(cp!==tp)requestAnimationFrame(loop);else run=false}
+function kick(){const h=hero.offsetHeight-innerHeight;tp=cl(-hero.getBoundingClientRect().top/h);if(!run){run=true;requestAnimationFrame(loop)}}
+addEventListener('scroll',kick,{passive:true});addEventListener('resize',kick);
+
+/* ====== INIT ====== */
+renderAll();kick();
+(async()=>{const l=await api('/api/readings/latest');modeTxt();pumpTxt();const d=l||rows[0];if(d)show(d)})();
+</script></body></html>
